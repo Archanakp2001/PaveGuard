@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
       width: '100%'
     },
     imgcontainer: {
-      marginTop: 100,
       height: 350
     },
     formcontainer: {

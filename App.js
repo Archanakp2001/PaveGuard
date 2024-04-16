@@ -17,40 +17,22 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      setIsLoading(false); // Set isLoading to false after delay (simulated loading complete)
-    }, 2000); // Simulated loading time: 3 seconds
-
-    return () => clearTimeout(delay); // Cleanup timer on component unmount
-  }, []);
-
 
   return (
     <TouchableWithoutFeedback onPress={()=> {Keyboard.dismiss();}}>
-      <View style={styles.container}>
-        
-        {isLoading ? (<LoadingScreen />) : (<SignInScreen />)}
-
-        <NavigationContainer>
-          <Stack.Navigator>
-            {/* <Stack.Screen name="Home" component={LoadingScreen} />
-            <Stack.Screen name="SignInScreen" component={SignInScreen} /> */}
-            <Stack.Screen name="UserSignup" component={UserSignup} />
-            <Stack.Screen name="SignupPopup" component={SignupPopup} />
-          </Stack.Navigator>
-        </NavigationContainer>
-
-       {/* <UserSignup /> */}
-       {/* <AuthoSignup /> */}
-       {/* <User /> */}
-        
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator 
+          initialRouteName="SignInScreen"
+          screenOptions={{
+            headerShown: false
+          }}> 
+          <Stack.Screen name="SignInScreen" component={SignInScreen} /> 
+          <Stack.Screen name="UserSignup" component={UserSignup} />
+          <Stack.Screen name="SignupPopup" component={SignupPopup} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </TouchableWithoutFeedback>
 
-  
   );
 }
 
