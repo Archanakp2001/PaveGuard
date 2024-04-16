@@ -28,7 +28,6 @@ export default function App() {
           }}> 
           <Stack.Screen name="SignInScreen" component={SignInScreen} /> 
           <Stack.Screen name="UserSignup" component={UserSignup} />
-          {/* <Stack.Screen name="SignupPopup" component={SignupPopup} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </TouchableWithoutFeedback>
