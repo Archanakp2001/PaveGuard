@@ -1,11 +1,13 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Pressable } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
 import { StatusBar } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-picker';
+import { useNavigation } from '@react-navigation/native';
 
 import SignupInput from '../Components/SignupInput';
+
 import userIcon from './../../assets/images/user.png';
 import phone from './../../assets/images/phone.png';
 import email from './../../assets/images/email.png';
@@ -19,9 +21,14 @@ import add from './../../assets/images/add.png'
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
-import SignInScreen from './SignInScreen';
 
-const AuthoSignup = ({navigation}) => {
+const AuthoSignup = () => {
+
+  const navigation = useNavigation();
+
+  const onSignInClick = () => {
+    navigation.navigate('SignInScreen')
+  }
 
   const selectFromGallery = () => {
     console.log(ImagePicker);
@@ -45,9 +52,6 @@ const AuthoSignup = ({navigation}) => {
     });
   };
 
-  const handlePress = () => {
-    navigation.navigate(<SignInScreen />)
-  }
 
 
   return (
@@ -94,7 +98,7 @@ const AuthoSignup = ({navigation}) => {
 
           <View style={[{flexDirection: 'row'}, {justifyContent: 'center'}, {marginTop: 20}]}>
             <Text style={[styles.text, {letterSpacing: 0.5}, ]}>Already have an account? </Text>
-            <TouchableOpacity onPress={handlePress}>
+            <TouchableOpacity onPress={onSignInClick}>
               <Text style={[styles.text, {textDecorationLine:'underline'}, {letterSpacing: 0.5}, {color:Colors.PRIMARY}]}>Sign In</Text>
             </TouchableOpacity>
           </View>

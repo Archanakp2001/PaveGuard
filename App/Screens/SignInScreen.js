@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View, Image, TextInput, Button, TouchableOpacity, Linking } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 import SigninInput from '../Components/SigninInput';
 import SignupPopup from '../Components/SignupPopup';
@@ -40,8 +41,9 @@ const handlePress = () => {
     console.log('Forgot Paswword');
 }
 
-const signIn = () => {
-    console.log('Button pressed');
+const navigation = useNavigation();
+const onSignIn = () => {
+  navigation.navigate('UserHome')
 }
   if (isLoading) {
     return <LoadingScreen />;
@@ -71,7 +73,7 @@ const signIn = () => {
                   
                   <TouchableOpacity onPress={handlePress}><Text style={[styles.text, {textAlign: 'right'},{color:Colors.PRIMARY}]}>Forgot Password?</Text></TouchableOpacity>
 
-                  <TouchableOpacity onPress={signIn}>
+                  <TouchableOpacity onPress={onSignIn}>
                       <View style={styles.button}>
                           <Text style={styles.buttonText}>SIGN IN</Text>
                       </View>

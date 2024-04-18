@@ -1,13 +1,10 @@
 // Popup.js
 import React from 'react';
 import { View, Modal, Text, TouchableOpacity, Image, Button } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 
 import styles from '../Utils/styles';
-
-import UserSignup from '../Screens/UserSignup';
 
 import User from './../../assets/images/signup_User.png';
 import Authority from './../../assets/images/signup_Authority.png';
@@ -18,6 +15,10 @@ const SignupPopup = ({ isVisible, onClose }) => {
 
   const onUserSignupClick = () => {
     navigation.navigate('UserSignup');
+    onClose();
+  }
+  const onAuthoSignupClick = () => {
+    navigation.navigate('AuthoSignup');
     onClose();
   }
 
@@ -48,7 +49,7 @@ const SignupPopup = ({ isVisible, onClose }) => {
                     <Text style={styles.categoryText}>User</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onAuthoSignupClick}>
                 <View style={styles.category}>
                     <View style={styles.categoryIcon}><Image style={[{height: 100},{width:100}]} source={Authority}/></View>
                     <Text style={styles.categoryText}>Authority</Text>

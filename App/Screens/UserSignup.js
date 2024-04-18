@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useNavigation } from '@react-navigation/native';
 
 import SignupInput from '../Components/SignupInput';
 
@@ -18,6 +19,13 @@ import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
 
 const UserSignup = () => {
+  
+  const navigation = useNavigation();
+
+  const onSignInClick = () => {
+    navigation.navigate('SignInScreen');
+  }
+
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.maincontainer}
@@ -55,7 +63,7 @@ const UserSignup = () => {
 
           <View style={[{flexDirection: 'row'}, {justifyContent: 'center'}, {marginTop: 30}]}>
             <Text style={[styles.text, {letterSpacing: 0.5}, ]}>Already have an account? </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onSignInClick}>
               <Text style={[styles.text, {textDecorationLine:'underline'}, {letterSpacing: 0.5}, {color:Colors.PRIMARY}]}>Sign In</Text>
             </TouchableOpacity>
           </View>

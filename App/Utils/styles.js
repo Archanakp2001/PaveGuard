@@ -14,14 +14,15 @@ const styles = StyleSheet.create({
       margin: 0,
       backgroundColor: Colors.BACKGROUND,
       alignItems:'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
     },
     container: {
       flex: 1,
       backgroundColor: Colors.BACKGROUND,
       alignItems:'center',
       justifyContent: 'center',
-      width: '100%'
+      width: '100%',
+      height: '100%'
     },
     imgcontainer: {
       height: 350

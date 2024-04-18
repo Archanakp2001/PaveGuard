@@ -7,11 +7,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import styles from './App/Utils/styles'
 
 import SignInScreen from './App/Screens/SignInScreen';
-import LoadingScreen from './App/Screens/LoadingScreen';
-import SignupPopup from './App/Components/SignupPopup';
 import UserSignup from './App/Screens/UserSignup';
 import AuthoSignup from './App/Screens/AuthoSignup';
 import User from './App/Screens/User';
+import UserHome from './App/Screens/UserHome';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +27,8 @@ export default function App() {
           }}> 
           <Stack.Screen name="SignInScreen" component={SignInScreen} /> 
           <Stack.Screen name="UserSignup" component={UserSignup} />
+          <Stack.Screen name="AuthoSignup" component={AuthoSignup} />
+          {/* <Stack.Screen name="UserHome" component={UserHome} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </TouchableWithoutFeedback>
