@@ -8,7 +8,7 @@ const UserHome = () => {
   return (
     <View style={styles.container}>
       <Text>User Home Screen</Text>
-      <MapView
+      {/* <MapView
         style={styles.map}
         initialRegion={{
           latitude: 37.78825,
@@ -22,7 +22,7 @@ const UserHome = () => {
           title="Marker Title"
           description="Marker Description"
         />
-      </MapView>
+      </MapView> */}
     </View>
   );
 };
