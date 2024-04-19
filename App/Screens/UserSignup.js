@@ -25,6 +25,9 @@ const UserSignup = () => {
   const onSignInClick = () => {
     navigation.navigate('SignInScreen');
   }
+  const onSignUpClick = () => {
+    navigation.navigate('UserHome');
+  }
 
   return (
     <KeyboardAwareScrollView
@@ -55,7 +58,7 @@ const UserSignup = () => {
           <SignupInput style={[styles.input, {marginTop: 20}]} icon={password} placeholder='Password' keyboardtype='default'/>
           <SignupInput style={[styles.input, {marginTop: 20}]} icon={confirm} placeholder='Confirm Password' keyboardtype='default'/>        
           
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onSignUpClick}>
             <View style={[styles.button, {marginTop: 50}]}>
               <Text style={styles.buttonText}>SIGN UP</Text>
             </View>

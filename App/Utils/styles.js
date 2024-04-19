@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.BACKGROUND,
       alignItems:'center',
       justifyContent: 'center',
-      width: '100%',
-      height: '100%'
+      paddingTop: 30,
+      paddingBottom: 120
     },
     imgcontainer: {
       height: 350
@@ -131,11 +131,15 @@ const styles = StyleSheet.create({
       letterSpacing: 1,
     },
     line: {
-      flex:1,
       width: 390,
       height: 1,
       backgroundColor: Colors.HEADLINE,
       marginVertical: 14,
+    },
+    map: {
+      flex: 1,
+      width: 400,
+      height: 200,
     },
   });
   

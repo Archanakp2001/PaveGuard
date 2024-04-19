@@ -43,7 +43,7 @@ const handlePress = () => {
 
 const navigation = useNavigation();
 const onSignIn = () => {
-  navigation.navigate('UserHome')
+  navigation.navigate('User')
 }
   if (isLoading) {
     return <LoadingScreen />;

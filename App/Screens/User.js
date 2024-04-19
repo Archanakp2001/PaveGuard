@@ -71,10 +71,98 @@
 //       ); 
 //     }   
 
+
+
+
+
+// import React from 'react';
+// import { Image } from 'react-native';
+// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+// // Import screen components
+// import userHome from './UserHome';
+// import userIssues from './UserIssues';
+// import userNotifications from './UserNoti';
+// import userProfile from './UserProfile';
+
+// import styles from '../Utils/styles';
+
+// const Tab = createBottomTabNavigator();
+
+// const User = () => {
+//   return (
+//     <Tab.Navigator
+//       initialRouteName="Home"
+//       screenOptions={{
+//         activeTintColor: '#006600',
+//         inactiveTintColor: '#696969',
+//         style: styles.tabBar,
+//       }}
+//     >
+//       <Tab.Screen
+//         name="Home"
+//         component={userHome}
+//         options={{
+//           tabBarLabel: 'Home' ,
+//           tabBarIcon: ({ focused, color, size }) => (
+//             <Image
+//               source={require('./../../assets/images/home.png')}
+//               style={{ width: size, height: size, tintColor: color}}
+//             />
+//           ),
+//         }}
+//       />
+//       <Tab.Screen
+//         name="Issues"
+//         component={userIssues}
+//         options={{
+//           tabBarLabel: 'Issues',
+//           tabBarIcon: ({ focused, color, size }) => (
+//             <Image
+//               source={require('./../../assets/images/issues.png')}
+//               style={{ width: size, height: size, tintColor: color }}
+//             />
+//           ),
+//         }}
+//       />
+//       <Tab.Screen
+//         name="Notifications"
+//         component={userNotifications}
+//         options={{
+//           tabBarLabel: 'Notifications',
+//           tabBarIcon: ({ focused, color, size }) => (
+//             <Image
+//               source={require('./../../assets/images/notifications.png')}
+//               style={{ width: size, height: size, tintColor: color }}
+//             />
+//           ),
+//         }}
+//       />
+//       <Tab.Screen
+//         name="Profile"
+//         component={userProfile}
+//         options={{
+//           tabBarLabel: 'Profile',
+//           tabBarIcon: ({ focused, color, size }) => (
+//             <Image
+//               source={require('./../../assets/images/user.png')}
+//               style={{ width: size, height: size, tintColor: color }}
+//             />
+//           ),
+//         }}
+//       />
+//     </Tab.Navigator>
+//   );
+// };
+
+// export default User;
+
+
+
+
 import React from 'react';
 import { Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 
 // Import screen components
 import userHome from './UserHome';
@@ -83,31 +171,43 @@ import userNotifications from './UserNoti';
 import userProfile from './UserProfile';
 
 import styles from '../Utils/styles';
+import Colors from '../Utils/Colors';
 
 const Tab = createBottomTabNavigator();
 
 const User = () => {
   return (
-    <NavigationContainer>
     <Tab.Navigator
       initialRouteName="Home"
-      screenOptions={{
-        activeTintColor: '#006600',
-        inactiveTintColor: '#999999',
-        style: {
-          backgroundColor: '#f8f8f8',
-        },
+      screenOptions = {{
+        tabBarShowLabel: false,
+        headerShown: false,
+        tabBarStyle: {
+          position: 'absolute',
+          bottom: 20,
+          left: 15,
+          right: 15,
+          shadowOpacity: 30,
+          elevation: 6,
+          height: 60,
+          borderRadius: 20,
+          backgroundColor: Colors.WHITE,
+          
+        }, 
+        
       }}
+      
+      
     >
       <Tab.Screen
         name="Home"
         component={userHome}
         options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ focused, color, size }) => (
+          tabBarLabel: 'Home' ,
+          tabBarIcon: ({ focused }) => (
             <Image
-              source={require('./../../assets/images/user.png')}
-              style={{ width: size, height: size, tintColor: color }}
+              source={require('./../../assets/images/home.png')}
+              style={{ width: 30, height: 30, tintColor: focused ? Colors.PRIMARY : '#B0B0B0'}}
             />
           ),
         }}
@@ -117,10 +217,10 @@ const User = () => {
         component={userIssues}
         options={{
           tabBarLabel: 'Issues',
-          tabBarIcon: ({ focused, color, size }) => (
+          tabBarIcon: ({ focused }) => (
             <Image
-              source={require('./../../assets/images/email.png')}
-              style={{ width: size, height: size, tintColor: color }}
+              source={require('./../../assets/images/issues.png')}
+              style={{ width: 30, height: 30, tintColor: focused ? Colors.PRIMARY : '#B0B0B0' }}
             />
           ),
         }}
@@ -130,12 +230,13 @@ const User = () => {
         component={userNotifications}
         options={{
           tabBarLabel: 'Notifications',
-          tabBarIcon: ({ focused, color, size }) => (
+          tabBarIcon: ({ focused }) => (
             <Image
-              source={require('./../../assets/images/add.png')}
-              style={{ width: size, height: size, tintColor: color }}
+              source={require('./../../assets/images/notifications.png')}
+              style={{ width: 30, height: 30, tintColor: focused ? Colors.PRIMARY : '#B0B0B0' }}
             />
           ),
+          tabBarBadge: 2
         }}
       />
       <Tab.Screen
@@ -143,16 +244,15 @@ const User = () => {
         component={userProfile}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({ focused, color, size }) => (
+          tabBarIcon: ({ focused }) => (
             <Image
               source={require('./../../assets/images/user.png')}
-              style={{ width: size, height: size, tintColor: color }}
+              style={{ width: 30, height: 30, tintColor: focused ? Colors.PRIMARY : '#B0B0B0' }}
             />
           ),
         }}
       />
     </Tab.Navigator>
-    </NavigationContainer>
   );
 };
 

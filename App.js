@@ -28,7 +28,8 @@ export default function App() {
           <Stack.Screen name="SignInScreen" component={SignInScreen} /> 
           <Stack.Screen name="UserSignup" component={UserSignup} />
           <Stack.Screen name="AuthoSignup" component={AuthoSignup} />
-          {/* <Stack.Screen name="UserHome" component={UserHome} /> */}
+          <Stack.Screen name="User" component={User} />
+          <Stack.Screen name="UserHome" component={UserHome} />
         </Stack.Navigator>
       </NavigationContainer>
     </TouchableWithoutFeedback>
