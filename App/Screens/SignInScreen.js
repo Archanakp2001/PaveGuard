@@ -17,37 +17,46 @@ import LoadingScreen from './LoadingScreen';
 
 export default function SignInScreen() {
 
+  // ------------ Loading screen --------------
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const delay = setTimeout(() => {
       setIsLoading(false); // Set isLoading to false after delay (simulated loading complete)
-    }, 2000); // Simulated loading time: 3 seconds
+    }, 2000); // Simulated loading time: 2 seconds
 
     return () => clearTimeout(delay); // Cleanup timer on component unmount
   }, []);
 
+  
+
+  // --------------- set input data ------------
 const [name, setName] = useState('');
 const [pwd, setPwd] = useState('');
 
+// --------------- Popup -----------------
 const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
 
+  // ---------------- Forgot password --------------
 const handlePress = () => {
     Linking.openURL('https://www.google.co.in/');
     console.log('Forgot Paswword');
 }
 
+// ---------------- Button sign in click ----------------
 const navigation = useNavigation();
 const onSignIn = () => {
   navigation.navigate('User')
 }
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
+
+if (isLoading) {
+  return <LoadingScreen />;
+}
+  
   return (
     <View style={styles.container}>
 
@@ -66,19 +75,27 @@ const onSignIn = () => {
                   <Image style={[{height: 400}, {width: 300}]} source={require('./../../assets/images/signin_img.png')}/>
               </View>
 
+
               {/* -------------- SignIn Form ---------------- */}
               <View style={styles.formcontainer}>
+
+
+                {/* ---------- Inputs ----------- */}
                   <SigninInput icon={userIcon} placeholder='Username' keyboardtype='default' onChangeText={(text)=>setName(text)}/>
                   <SigninInput icon={password} placeholder='Password' keyboardtype='default' component='Password' onChangeText={(text)=>setPwd(text)} secureTextEntry={true}/>
                   
                   <TouchableOpacity onPress={handlePress}><Text style={[styles.text, {textAlign: 'right'},{color:Colors.PRIMARY}]}>Forgot Password?</Text></TouchableOpacity>
 
+
+                {/* --------- Sign in button ----------- */}
                   <TouchableOpacity onPress={onSignIn}>
                       <View style={styles.button}>
                           <Text style={styles.buttonText}>SIGN IN</Text>
                       </View>
                   </TouchableOpacity>
 
+
+                {/* ------------ For sign up -------------- */}
                   <View style={[{flexDirection: 'row'}, {justifyContent: 'center'}, {marginTop: 30}]}>
                       <Text style={[styles.text, {letterSpacing: 0.5}, ]}>Don't have an account? </Text>
                       <TouchableOpacity onPress={togglePopup}>

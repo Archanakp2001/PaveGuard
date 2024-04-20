@@ -136,11 +136,102 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.HEADLINE,
       marginVertical: 14,
     },
+
+    // ----------- User Home --------------
     map: {
       flex: 1,
       width: 400,
       height: 200,
     },
+
+    // ---------------- Common user styles --------------
+    mainContainer: {
+      flex: 1,
+      backgroundColor: Colors.BACKGROUND,
+      paddingTop: 50,
+    },
+    mainHead: {
+      fontSize: 22,
+      color: Colors.PRIMARY,
+      fontWeight: 'bold',
+      letterSpacing: 1,
+      paddingLeft: 20
+    },
+    mainLine: {
+      width: '100%',
+      height: 1,
+      backgroundColor: Colors.HEADLINE,
+      marginVertical: 14,
+    },
+    miniTitle: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    miniIcon: {
+      height: 34,
+      width: 34,
+      marginLeft: 15,
+    },
+    miniHead: {
+      fontSize: 20,
+      color: Colors.PRIMARY,
+      fontWeight: 'bold',
+      letterSpacing: 1,
+      paddingLeft: 20
+    },
+    miniLine: {
+      width: '100%',
+      height: 1,
+      backgroundColor: Colors.HEADLINE,
+      marginVertical: 10,
+    },
+    miniContainer: {
+      flex:1,
+
+    },
+
+    // ---------------- User profile ----------------
+    cards: {
+      alignItems: 'center',
+      marginTop: 30,
+    },
+    profileCard: {
+      height: 60,
+      width: 360,
+      backgroundColor: Colors.BACKGROUND,
+      borderRadius: 15,
+      elevation: 6,
+      alignItems: 'center',
+      flexDirection: 'row',
+      marginBottom: 30
+    },
+    cardTitle: {
+      flex: 1,
+      fontSize: 18,
+      color: Colors.PRIMARY,
+      letterSpacing: 0.8,
+      paddingLeft: 20,
+      fontWeight: '500'
+    },
+    cardIcon: {
+      height: 40,
+      width: 40,
+      tintColor: Colors.PRIMARY,
+      marginRight: 10
+    },
+    
+    // ----------------- Edit Profile -----------------
+    editInput: {
+      borderBottomWidth: 0.2,
+      width: 350,
+      height: 50,
+      borderColor: Colors.TEXT,
+      color: Colors.TEXT,
+      letterSpacing: 1,
+      marginBottom: 30
+    }
+    
+    
   });
   
   export default styles;
