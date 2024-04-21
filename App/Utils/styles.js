@@ -230,6 +230,25 @@ const styles = StyleSheet.create({
       color: Colors.TEXT,
       letterSpacing: 1,
       marginBottom: 30
+    },
+
+    // ----------------- Feedbacks ----------------------
+    feedbacks: {
+      height: 100,
+      width: 350,
+      backgroundColor: Colors.BACKGROUND,
+      elevation: 3,
+      marginTop: 30,
+      borderRadius: 15,
+      paddingVertical: 20,
+      paddingHorizontal: 10,
+    },
+    newFeed : {
+      width: 320,
+      borderWidth: 0.2,
+      borderColor: Colors.BORDER,
+      borderRadius: 10,
+      padding: 20,
     }
     
     
