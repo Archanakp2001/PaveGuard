@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       flex: 1,
+      backgroundColor: Colors.BACKGROUND,
     },
 
     // ------------------ Sign In Screen --------------------
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
       paddingBottom: 120
     },
     imgcontainer: {
-      height: 350
+      height: 350,
     },
     formcontainer: {
       marginTop: 50

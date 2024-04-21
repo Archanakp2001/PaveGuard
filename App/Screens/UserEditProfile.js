@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
-import backward from './../../assets/images/backward.png';
-import styles from '../Utils/styles';
 import { useNavigation } from '@react-navigation/native';
+
+
+import MiniTitle from '../Components/MiniTitle';
+
+import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
 
 const UserEditProfile = () => {
@@ -32,13 +34,7 @@ const UserEditProfile = () => {
     <View style={styles.mainContainer}>
 
       {/* ---------------------- Title ------------------- */}
-      <View>
-        <View style={styles.miniTitle}>
-          <TouchableOpacity onPress={onIconClick}><Image source={backward} style={styles.miniIcon} /></TouchableOpacity>
-          <Text style={styles.miniHead}>Edit Profile</Text>
-        </View>
-        <View style={styles.miniLine} />
-      </View>
+      <MiniTitle title='Edit Profile' navigateTo={onIconClick}/>
 
 
       {/* -------------------- Edit fields ------------------- */}
