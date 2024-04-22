@@ -249,6 +249,17 @@ const styles = StyleSheet.create({
       borderColor: Colors.BORDER,
       borderRadius: 10,
       padding: 20,
+    },
+
+    // --------------------- Settings -----------------------
+    settings: {
+     flexDirection: 'row',
+     alignItems: 'center',
+     width: 360,
+     justifyContent: 'space-between',
+     borderBottomWidth: 0.3,
+     paddingBottom: 10,
+     marginTop: 20
     }
     
     
