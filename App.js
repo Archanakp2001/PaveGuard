@@ -18,6 +18,7 @@ import UserSettings from './App/Screens/UserSettings';
 import About from './App/Screens/About';
 import UserProfile from './App/Screens/UserProfile';
 import PasswordChange from './App/Screens/PasswordChange';
+import MainTitle from './App/Components/MainTitle';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +45,7 @@ export default function App() {
           <Stack.Screen name="UserFaqs" component={UserFaqs} />
           <Stack.Screen name="UserSettings" component={UserSettings} />
           <Stack.Screen name="About" component={About} />
+          <Stack.Screen name="MainTitle" component={MainTitle} />
         </Stack.Navigator>
       </NavigationContainer>
     </TouchableWithoutFeedback>

@@ -5,5 +5,6 @@ export default {
     PRIMARY: '#85663C',
     BORDER: '#464646',
     TEXT: '#696969',
-    HEADLINE: '#D7D7D7'
+    HEADLINE: '#D7D7D7', 
+    CARD: '#DBCEBC',
 }

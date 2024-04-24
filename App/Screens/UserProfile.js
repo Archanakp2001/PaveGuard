@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import ProfileCard from '../Components/ProfileCard';
 import forward from '../../assets/images/forward.png';
 import styles from '../Utils/styles';
+import MainTitle from '../Components/MainTitle';
 
 const UserProfile = () => {
 
@@ -32,10 +33,11 @@ const UserProfile = () => {
     <View style={styles.mainContainer}>
       
       {/* ----------------- Title ------------------ */}
-      <View>
+      {/* <View>
         <Text style={styles.mainHead}>Archana</Text>
         <View style={styles.mainLine} />
-      </View>
+      </View> */}
+      <MainTitle title='Username'/>
 
 
       {/* ---------------- Features ----------------- */}
@@ -52,7 +54,7 @@ const UserProfile = () => {
 
       {/* --------------- Log out button ---------------- */}
       <TouchableOpacity onPress={onLogOut} style={[{alignItems: 'center'}]}>
-        <View style={[styles.button, {width: 350, marginTop: 140}]}>
+        <View style={[styles.button, {width: 350, marginTop: 120}]}>
           <Text style={[styles.buttonText, {letterSpacing: 2}]}>Log Out</Text>
         </View>
       </TouchableOpacity>

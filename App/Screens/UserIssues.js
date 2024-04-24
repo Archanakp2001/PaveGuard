@@ -1,11 +1,16 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+
+import MainTitle from '../Components/MainTitle';
 import styles from '../Utils/styles';
 
 const UserIssues = () => {
   return (
-    <View style={styles.container}>
-      <Text>User Issue Screen</Text>
+    <View style={styles.mainContainer}>
+      
+      {/* ----------------- Title ------------------- */}
+      <MainTitle title='Issues'/>
+
     </View>
   );
 };

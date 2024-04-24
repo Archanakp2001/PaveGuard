@@ -2,11 +2,13 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
+import MainTitle from '../Components/MainTitle';
 import styles from '../Utils/styles';
 
 const UserHome = () => {
   return (
     <View style={styles.container}>
+
       <Text>User Home Screen</Text>
       <MapView
         style={styles.map}

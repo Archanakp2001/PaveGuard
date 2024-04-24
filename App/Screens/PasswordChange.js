@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import backward from './../../assets/images/backward.png';
 import styles from '../Utils/styles';
+import MiniTitle from '../Components/MiniTitle';
 
 const PasswordChange = () => {
 
@@ -27,13 +28,7 @@ const PasswordChange = () => {
       <View style={styles.mainContainer}>
         
         {/* ---------------------- Title ------------------- */}
-        <View>
-          <View style={styles.miniTitle}>
-            <TouchableOpacity onPress={onIconClick}><Image source={backward} style={styles.miniIcon} /></TouchableOpacity>
-            <Text style={styles.miniHead}>Change Password</Text>
-          </View>
-          <View style={styles.miniLine} />
-        </View>
+        <MiniTitle title='Change Password' navigateTo={onIconClick}/>
 
 
         {/* -------------------- Edit fields ------------------- */}

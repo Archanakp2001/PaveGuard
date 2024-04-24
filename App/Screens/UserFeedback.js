@@ -39,7 +39,7 @@ const UserFeedback = () => {
 
         {/* ----------------- New button ------------------ */}
         <TouchableOpacity onPress={onNewFeedback} style={[{alignItems: 'center'}]}>
-          <View style={[styles.button, {width: 350, marginTop: 40}]}>
+          <View style={[styles.button, {width: 360, marginTop: 40}]}>
             <Text style={[styles.buttonText, {letterSpacing: 2, fontSize: 18}]}>+ New</Text>
           </View>
         </TouchableOpacity>

@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     mainContainer: {
       flex: 1,
       backgroundColor: Colors.BACKGROUND,
-      paddingTop: 50,
+      // paddingTop: 50,
     },
     mainHead: {
       fontSize: 22,
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     // ---------------- User profile ----------------
     cards: {
       alignItems: 'center',
-      marginTop: 30,
+      marginTop: 10,
     },
     profileCard: {
       height: 60,
@@ -235,13 +235,13 @@ const styles = StyleSheet.create({
     // ----------------- Feedbacks ----------------------
     feedbacks: {
       height: 100,
-      width: 350,
-      backgroundColor: Colors.BACKGROUND,
-      elevation: 3,
-      marginTop: 30,
+      width: 360,
+      backgroundColor: Colors.CARD,
+      // elevation: 3,
+      marginTop: 20,
       borderRadius: 15,
       paddingVertical: 20,
-      paddingHorizontal: 10,
+      paddingHorizontal: 20,
     },
     newFeed : {
       width: 320,
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
      flexDirection: 'row',
      alignItems: 'center',
      width: 360,
-     justifyContent: 'space-between',
+    //  justifyContent: 'space-between',
      borderBottomWidth: 0.3,
      paddingBottom: 10,
      marginTop: 20
