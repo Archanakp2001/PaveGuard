@@ -260,6 +260,31 @@ const styles = StyleSheet.create({
      borderBottomWidth: 0.3,
      paddingBottom: 10,
      marginTop: 20
+    },
+
+    // ----------------- Notifications --------------------
+    notifications: {
+      marginBottom: 30,
+      backgroundColor: Colors.BACKGROUND,
+      elevation: 3,
+      borderRadius: 15,
+      width: 380,
+      height: 80, 
+      padding: 10,
+      flexDirection: 'row', 
+      justifyContent: 'center',
+      
+    }, 
+
+    // ----------------- Issues ----------------------
+    issues: {
+      backgroundColor: Colors.BACKGROUND,
+      elevation: 4,
+      width: 380,
+      height: 140,
+      borderRadius: 15,
+      paddingVertical: 10, 
+      paddingHorizontal: 15
     }
     
     
