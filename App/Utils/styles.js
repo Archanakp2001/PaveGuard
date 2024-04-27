@@ -141,8 +141,25 @@ const styles = StyleSheet.create({
     // ----------- User Home --------------
     map: {
       flex: 1,
-      width: 400,
-      height: 200,
+    },
+    mapSearch: {
+      width: 330,
+      height: 40,
+      borderRadius: 12,
+      padding: 10,
+      backgroundColor: Colors.WHITE,
+      elevation: 5,
+      flexDirection:'row'
+    },
+    issueButton:{
+      height: 50,
+      width: 200,
+      backgroundColor: 'rgba(133, 102, 60, 0.8)',
+      borderRadius: 18,
+      marginTop: -24,
+      alignItems: 'center',
+      justifyContent: 'center',
+      
     },
 
     // ---------------- Common user styles --------------
@@ -284,7 +301,8 @@ const styles = StyleSheet.create({
       height: 140,
       borderRadius: 15,
       paddingVertical: 10, 
-      paddingHorizontal: 15
+      paddingHorizontal: 15, 
+      marginBottom: 20
     }
     
     
