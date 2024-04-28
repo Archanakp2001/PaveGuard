@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Image, TextInput, Button, TouchableOpacity, Linking } from 'react-native';
+import { Text, View, Image, TextInput, Button, TouchableOpacity, Linking, ToastAndroid } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -51,6 +51,7 @@ const handlePress = () => {
 const navigation = useNavigation();
 const onSignIn = () => {
   navigation.navigate('User')
+  ToastAndroid.show('Signed In!', ToastAndroid.SHORT);
 }
 
 if (isLoading) {

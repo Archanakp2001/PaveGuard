@@ -6,6 +6,8 @@ import SearchBar from '../Components/SearchBar.js';
 import AutoComplete from '../Components/AutoComplete.js';
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors.js';
+import ImageCarousel from '../Components/ImageCarousel.js';
+import SlideUpView from '../Components/SlideUpView.js';
 
 navigator.geolocation = require('react-native-geolocation-service');
 
@@ -14,6 +16,8 @@ const UserHome = () => {
   const handleSearch = (location) => {
     console.log(location);
   };
+  
+  const [isSlideUpVisible, setIsSlideUpVisible] = useState(false);
 
   return (
     
@@ -47,11 +51,15 @@ const UserHome = () => {
       </View>
 
       {/* ------------------- Post issue -------------------- */}
-      <View style={[{alignItems: 'center'}]}>
+      <TouchableOpacity style={[{alignItems: 'center'}]} onPress={() => setIsSlideUpVisible(true)}>
         <View style={styles.issueButton}>
           <Text style={[{color: Colors.WHITE, fontSize: 18}]}>+  Report an Issue</Text>
         </View>
-      </View>
+      </TouchableOpacity>
+      <SlideUpView
+        isVisible={isSlideUpVisible}
+        onClose={() => setIsSlideUpVisible(false)}
+      />
         
       {/* --------------------- About section ----------------- */}
       <View style={[{marginHorizontal: 30, marginTop: 30}]}>
@@ -63,14 +71,10 @@ const UserHome = () => {
       {/* --------------------- Gallery section ----------------- */}
       <View style={[{marginHorizontal: 30, marginTop: 50}]}>
         <Text style={[{color: Colors.PRIMARY, fontSize: 20, fontWeight: '600', marginBottom: 10}]}>Gallery</Text>
-        <View style={[{flexDirection: 'row', gap: 20}]}>
-          <Image source={require('../../assets/images/construction1.jpg')} style={[{height: 150, width: 150}]}/>
-          <Image source={require('../../assets/images/construction2.jpg')} style={[{height: 150, width: 150}]}/>
-          {/* <Image source={require('../../assets/images/construction3.jpg')} style={[{height: 150, width: 150}]}/> */}
-        </View>
+        <ImageCarousel />
       </View>
 
-      </ScrollView>
+    </ScrollView>
 
     </View>
     
