@@ -31,7 +31,6 @@ const User = () => {
           height: 60,
           borderRadius: 20,
           backgroundColor: Colors.WHITE,
-          
         }, 
         
       }}

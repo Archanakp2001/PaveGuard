@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from './Colors';
+import IssueSummary from '../Screens/IssueSummary';
 
 const styles = StyleSheet.create({
     // -------------- Loading Screen ---------------
@@ -303,6 +304,46 @@ const styles = StyleSheet.create({
       paddingVertical: 10, 
       paddingHorizontal: 15, 
       marginBottom: 20
+    },
+
+    // -------------- Issue Summary ----------------
+    thankyou: {
+      height: 190,
+      width: 360,
+      borderRadius: 15,
+      alignSelf: 'center',
+      marginTop: 30, 
+      backgroundColor: 'rgba(133, 102, 60, 0.3)'
+    },
+    thankuText: {
+      fontSize: 20,
+      color: Colors.PRIMARY,
+      fontWeight: '500',
+      alignSelf: 'center',
+      marginTop: 10
+    },
+    thankuContent: {
+      alignSelf: 'center',
+      textAlign: 'center',
+      marginTop: 8,
+      color: '#5A5A5A'
+    },
+    issueSummary: {
+      height: 550,
+      width: 360,
+      borderWidth: 0.5,
+      borderColor: Colors.BORDER,
+      borderRadius: 15,
+      alignSelf: 'center',
+      marginTop: 20,
+      padding: 20
+    },
+    summaryImages: {
+      height: 100,
+      width: 100,
+      borderWidth: 0.5,
+      borderRadius: 8,
+      borderColor: '#A3A3A3',
     }
     
     
