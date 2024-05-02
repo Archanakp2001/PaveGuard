@@ -5,7 +5,7 @@ import Colors from '../Utils/Colors';
 
 const AutoComplete = () => {
   return (
-    <View style={[{position: 'absolute', top: 0, zIndex: 1, paddingLeft: 30, marginTop: 50, }]}>
+    <View style={[{position: 'absolute', top: 0, zIndex: 1, flex: 0.5, paddingLeft: 30, marginTop: 50, }]}>
       <GooglePlacesAutocomplete
         placeholder="Search Location..."
         onPress={(data, details = null) => {
@@ -38,8 +38,8 @@ const AutoComplete = () => {
               color: '#1faadb',
             },
           }}
-        currentLocation={true}
-        currentLocationLabel="Current location"
+        // currentLocation={true}
+        // currentLocationLabel="Current location"
       />
     </View>
   );

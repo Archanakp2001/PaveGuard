@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
     // ----------- User Home --------------
     map: {
       flex: 1,
+      zIndex: 0
     },
     mapSearch: {
       width: 330,
@@ -182,28 +183,7 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.HEADLINE,
       marginVertical: 14,
     },
-    miniTitle: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    miniIcon: {
-      height: 34,
-      width: 34,
-      marginLeft: 15,
-    },
-    miniHead: {
-      fontSize: 20,
-      color: Colors.PRIMARY,
-      fontWeight: 'bold',
-      letterSpacing: 1,
-      paddingLeft: 20
-    },
-    miniLine: {
-      width: '100%',
-      height: 1,
-      backgroundColor: Colors.HEADLINE,
-      marginVertical: 10,
-    },
+    
     miniContainer: {
       flex:1,
 
@@ -307,44 +287,6 @@ const styles = StyleSheet.create({
     },
 
     // -------------- Issue Summary ----------------
-    thankyou: {
-      height: 190,
-      width: 360,
-      borderRadius: 15,
-      alignSelf: 'center',
-      marginTop: 30, 
-      backgroundColor: 'rgba(133, 102, 60, 0.3)'
-    },
-    thankuText: {
-      fontSize: 20,
-      color: Colors.PRIMARY,
-      fontWeight: '500',
-      alignSelf: 'center',
-      marginTop: 10
-    },
-    thankuContent: {
-      alignSelf: 'center',
-      textAlign: 'center',
-      marginTop: 8,
-      color: '#5A5A5A'
-    },
-    issueSummary: {
-      height: 550,
-      width: 360,
-      borderWidth: 0.5,
-      borderColor: Colors.BORDER,
-      borderRadius: 15,
-      alignSelf: 'center',
-      marginTop: 20,
-      padding: 20
-    },
-    summaryImages: {
-      height: 100,
-      width: 100,
-      borderWidth: 0.5,
-      borderRadius: 8,
-      borderColor: '#A3A3A3',
-    }
     
     
   });

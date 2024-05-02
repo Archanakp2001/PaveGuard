@@ -22,7 +22,7 @@ const UserHome = () => {
   return (
     
     <View style={[styles.mainContainer, {paddingBottom: 100}]}>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps='always'>
 
       <View style={[{height: 550}]}>
 
