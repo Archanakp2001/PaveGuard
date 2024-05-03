@@ -64,8 +64,11 @@ const UserHome = () => {
       {/* --------------------- About section ----------------- */}
       <View style={[{marginHorizontal: 30, marginTop: 30}]}>
         <Text style={[{color: Colors.PRIMARY, fontSize: 20, fontWeight: '600', marginBottom: 8}]}>About</Text>
-        <Text style={[{color: Colors.TEXT, lineHeight: 20, textAlign: 'justify'}]}>PaveGuard is an Infrastructure Maintenance App that allows citizens to easily navigate and report road damages. Users can select the option to report an issue.
-        Users can also provide a brief description of the issue, such as potholes, cracks, or road debris.Users receive confirmation of their report submission and may receive updates on the status of repairs by the authorities.</Text>
+        <Text style={[{color: Colors.TEXT, lineHeight: 20, textAlign: 'justify'}]}>PaveGuard is an Infrastructure Maintenance App that allows citizens to report road damage and navigate easily. 
+        There is an option for users to report issues.
+        The user may also provide a brief description of the problem, such as potholes, cracks, or road debris. 
+        The report is confirmed once it has been submitted, and the authority may contact the user with an update on the status of the repair.
+        </Text>
       </View>
 
       {/* --------------------- Gallery section ----------------- */}
