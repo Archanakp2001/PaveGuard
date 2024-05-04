@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import SearchBar from '../Components/SearchBar.js';
 import AutoComplete from '../Components/AutoComplete.js';
@@ -28,7 +29,15 @@ const UserHome = () => {
 
         {/* --------------------- Searchbar --------------------- */}
         {/* <SearchBar onSearch={handleSearch}/> */}
-        <AutoComplete />
+        {/* <AutoComplete /> */}
+        <GooglePlacesAutocomplete
+          placeholder="Type a place"
+          query={{key: 'AIzaSyAmp0ero6e6ZEUkodpzaNEwlmGZ7Kvi1Bk'}}
+          fetchDetails={true}
+          onPress={(data, details = null) => console.log(data, details)}
+          onFail={error => console.log(error)}
+          onNotFound={() => console.log('no results')}
+        />
 
         {/* ------------------------ Map ------------------------ */}
         <View style={[{flex: 1}]}>

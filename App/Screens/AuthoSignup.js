@@ -30,6 +30,10 @@ const AuthoSignup = () => {
     navigation.navigate('SignInScreen')
   }
 
+  const onSignupClick = () => {
+    navigation.navigate('Authority')
+  }
+
   const selectFromGallery = () => {
     console.log(ImagePicker);
     const options = {
@@ -90,7 +94,7 @@ const AuthoSignup = () => {
           <SignupInput style={[styles.input, {marginTop: 15}]} icon={password} placeholder='Password' keyboardtype='default' secureTextEntry={true}/>
           <SignupInput style={[styles.input, {marginTop: 15}]} icon={confirm} placeholder='Confirm Password' keyboardtype='default' secureTextEntry={true}/>        
           
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onSignupClick}>
             <View style={[styles.button, {marginTop: 20}]}>
               <Text style={styles.buttonText}>SIGN UP</Text>
             </View>

@@ -5,10 +5,12 @@ import { useNavigation } from '@react-navigation/native';
 import MiniTitle from '../Components/MiniTitle';
 import ProfileCard from './../Components/ProfileCard.js';
 import forward from './../../assets/images/forward.png';
-import styles from '../Utils/styles';
 import TermsOfUse from '../Components/TermsOfUse.js';
 import PrivacyPolicy from '../Components/PrivacyPolicy.js';
 import AboutApp from '../Components/AboutApp.js';
+
+import styles from '../Utils/styles';
+import Colors from '../Utils/Colors.js';
 
 const About = () => {
   // ---------------- Back Icon click --------------
@@ -57,7 +59,12 @@ const About = () => {
 
         <ProfileCard title="About App" icon={forward} navigateTo={aboutPopup} />
         <AboutApp isVisible={isAboutVisible} onClose={aboutPopup} />
-        {/* <ProfileCard title="App version" /> */}
+
+        <View style={styles.profileCard}>
+          <Text style={styles.cardTitle}>App Version</Text>
+          <Text style={{marginRight: 25}}>v1.0</Text>
+        </View>
+        
       </View>
     </View>
 

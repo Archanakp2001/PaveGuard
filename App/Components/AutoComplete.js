@@ -13,7 +13,7 @@ const AutoComplete = () => {
           // Handle selected place (e.g., update state, fetch details, etc.)
         }}
         query={{
-          key: 'AIzaSyAjSl5fVQqWTPpsW2qzoFoOn5ETbVF99Tg',
+          key: 'AIzaSyAmp0ero6e6ZEUkodpzaNEwlmGZ7Kvi1Bk',
           language: 'en', // Optional: language preference
         }}
         styles={{
