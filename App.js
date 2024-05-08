@@ -22,6 +22,8 @@ import MainTitle from './App/Components/MainTitle';
 import IssueSummary from './App/Screens/IssueSummary';
 import UserIssues from './App/Screens/UserIssues';
 import Authority from './App/Screens/Authority';
+import AuthorityProfile from './App/Screens/AuthorityProfile';
+import AuthorityEdit from './App/Screens/AuthorityEdit';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +54,8 @@ export default function App() {
           <Stack.Screen name="MainTitle" component={MainTitle} />
           <Stack.Screen name="IssueSummary" component={IssueSummary} />
           <Stack.Screen name='Authority' component={Authority} />
+          <Stack.Screen name='AuthorityProfile' component={AuthorityProfile} />
+          <Stack.Screen name='AuthorityEdit' component={AuthorityEdit} />
         </Stack.Navigator>
       </NavigationContainer>
     </TouchableWithoutFeedback>

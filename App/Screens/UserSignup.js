@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -8,26 +8,39 @@ import { useNavigation } from '@react-navigation/native';
 import SignupInput from '../Components/SignupInput';
 
 import userIcon from './../../assets/images/user.png';
-import phone from './../../assets/images/phone.png';
-import email from './../../assets/images/email.png';
-import place from './../../assets/images/place.png';
-import panchayath from './../../assets/images/panchayath.png';
-import password from './../../assets/images/password.png';
+import phoneIcon from './../../assets/images/phone.png';
+import emailIcon from './../../assets/images/email.png';
+import placeIcon from './../../assets/images/place.png';
+import panchayathIcon from './../../assets/images/panchayath.png';
+import passwordIcon from './../../assets/images/password.png';
 import confirm from './../../assets/images/confPassword.png';
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
+import useLoginOrSignup from '../loginsignupAuth/CustomHooks/useLoginOrSignup';
 
 const UserSignup = () => {
+
+  // --------------- set input data ----------------
+  const [username, setUsername] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [place, setPlace] = useState('');
+  const [panchayath, setPanchayath] = useState('');
+  const [password, setPassword] = useState('');
+  const [confPassword, setConfPassword] = useState('');
+
+  const { usernameError, emailError, phoneError, passwordError, handleSignup, loading } = useLoginOrSignup(navigation)
   
+  // --------------- navigation -------------------
   const navigation = useNavigation();
 
   const onSignInClick = () => {
     navigation.navigate('SignInScreen');
   }
-  const onSignUpClick = () => {
-    navigation.navigate('UserHome');
-  }
+  // const onSignUpClick = () => {
+  //   navigation.navigate('UserHome');
+  // }
 
   return (
     <KeyboardAwareScrollView
@@ -50,15 +63,27 @@ const UserSignup = () => {
         {/* ------------- Details ------------- */}
         <View style={{marginTop: 20}}>
 
-          <SignupInput style={[styles.input, {marginTop: 20}]} icon={userIcon} placeholder='User Name' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 20}]} icon={phone} placeholder='Phone no' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 20}]} icon={email} placeholder='Email id' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 20}]} icon={place} placeholder='Place' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 20}]} icon={panchayath} placeholder='Panchayath' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 20}]} icon={password} placeholder='Password' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 20}]} icon={confirm} placeholder='Confirm Password' keyboardtype='default'/>        
+          <SignupInput style={[styles.input, {marginTop: 20}]} icon={userIcon} placeholder='User Name' keyboardtype='default' onChangeText={(text)=>setUsername(text)}/>
+          <Text style={{color: 'red'}}> { usernameError } </Text>
           
-          <TouchableOpacity onPress={onSignUpClick}>
+          <SignupInput style={[styles.input, {marginTop: 20}]} icon={phoneIcon} placeholder='Phone no' keyboardtype='default' onChangeText={(text)=>setPhone(text)}/>
+          <Text style={{color: 'red'}}> { phoneError } </Text>
+
+          <SignupInput style={[styles.input, {marginTop: 20}]} icon={emailIcon} placeholder='Email id' keyboardtype='default' onChangeText={(text)=>setEmail(text)}/>
+          <Text style={{color: 'red'}}> { emailError } </Text>
+
+          <SignupInput style={[styles.input, {marginTop: 20}]} icon={placeIcon} placeholder='Place' keyboardtype='default' onChangeText={(text)=>setPlace(text)}/>
+          
+          <SignupInput style={[styles.input, {marginTop: 20}]} icon={panchayathIcon} placeholder='Panchayath' keyboardtype='default' onChangeText={(text)=>setPanchayath(text)}/>
+          
+          <SignupInput style={[styles.input, {marginTop: 20}]} icon={passwordIcon} placeholder='Password' keyboardtype='default' onChangeText={(text)=>setPassword(text)}/>
+          <Text style={{color: 'red'}}> { passwordError } </Text>
+
+          <SignupInput style={[styles.input, {marginTop: 20}]} icon={confirm} placeholder='Confirm Password' keyboardtype='default' onChangeText={(text)=>setConfPassword(text)}/>        
+          
+          {/* ------------------ Signup button --------------- */}
+          <View>{loading}</View>
+          <TouchableOpacity onPress={handleSignup}>
             <View style={[styles.button, {marginTop: 50}]}>
               <Text style={styles.buttonText}>SIGN UP</Text>
             </View>

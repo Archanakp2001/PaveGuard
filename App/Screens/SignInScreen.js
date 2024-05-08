@@ -4,15 +4,16 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
+import LoadingScreen from './LoadingScreen';
 import SigninInput from '../Components/SigninInput';
 import SignupPopup from '../Components/SignupPopup';
+import useLoginOrSignup from '../loginsignupAuth/CustomHooks/useLoginOrSignup';
 
 import userIcon from './../../assets/images/user.png';
-import password from './../../assets/images/password.png';
+import passwordIcon from './../../assets/images/password.png';
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
-import LoadingScreen from './LoadingScreen';
 
 
 export default function SignInScreen() {
@@ -30,9 +31,12 @@ export default function SignInScreen() {
 
   
 
-  // --------------- set input data ------------
-const [name, setName] = useState('');
-const [pwd, setPwd] = useState('');
+// --------------- set input data ------------
+const [username, setUsername] = useState('');
+const [password, setPassword] = useState('');
+
+const { usernameError, passwordError, handleLogin, loading } = useLoginOrSignup(navigation)
+
 
 // --------------- Popup -----------------
 const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -41,18 +45,20 @@ const [isPopupVisible, setIsPopupVisible] = useState(false);
     setIsPopupVisible(!isPopupVisible);
   };
 
-  // ---------------- Forgot password --------------
+
+// ---------------- Forgot password --------------
 const handlePress = () => {
     Linking.openURL('https://www.google.co.in/');
     console.log('Forgot Paswword');
 }
 
+
 // ---------------- Button sign in click ----------------
 const navigation = useNavigation();
-const onSignIn = () => {
-  navigation.navigate('User')
-  ToastAndroid.show('Signed In!', ToastAndroid.SHORT);
-}
+// const onSignIn = () => {
+//   navigation.navigate('User')
+//   ToastAndroid.show('Signed In!', ToastAndroid.SHORT);
+// }
 
 if (isLoading) {
   return <LoadingScreen />;
@@ -82,14 +88,18 @@ if (isLoading) {
 
 
                 {/* ---------- Inputs ----------- */}
-                  <SigninInput icon={userIcon} placeholder='Username' keyboardtype='default' onChangeText={(text)=>setName(text)}/>
-                  <SigninInput icon={password} placeholder='Password' keyboardtype='default' component='Password' onChangeText={(text)=>setPwd(text)} secureTextEntry={true}/>
+                  <SigninInput icon={userIcon} placeholder='Username' keyboardtype='default' onChangeText={(text)=>setUsername(text)}/>
+                  <Text style={{color: 'red', paddingTop: 4}}> { usernameError } </Text>
+                  
+                  <SigninInput icon={passwordIcon} placeholder='Password' keyboardtype='default' component='Password' onChangeText={(text)=>setPassword(text)} secureTextEntry={true}/>
+                  <Text style={{color: 'red', paddingTop: 4}}> { passwordError } </Text>
                   
                   <TouchableOpacity onPress={handlePress}><Text style={[styles.text, {textAlign: 'right'},{color:Colors.PRIMARY}]}>Forgot Password?</Text></TouchableOpacity>
 
 
                 {/* --------- Sign in button ----------- */}
-                  <TouchableOpacity onPress={onSignIn}>
+                  <View>{loading}</View>
+                  <TouchableOpacity onPress={() => handleLogin(username, password)}>
                       <View style={styles.button}>
                           <Text style={styles.buttonText}>SIGN IN</Text>
                       </View>

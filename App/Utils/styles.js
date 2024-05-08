@@ -286,8 +286,52 @@ const styles = StyleSheet.create({
       marginBottom: 20
     },
 
-    // -------------- Issue Summary ----------------
-    
+    // -------------- Authority Profile ----------------
+    authoProfileImg: {
+      borderWidth: 1, 
+      borderColor: '#EAEAEA', 
+      height: 100, 
+      width: 100, 
+      borderRadius: 100, 
+      alignSelf: 'center', 
+      marginTop: -100, 
+      backgroundColor: Colors.BACKGROUND
+    },
+    authoName: {
+      textAlign: 'center', 
+      marginTop: 10, 
+      color: Colors.PRIMARY
+    },
+    profileEdit: {
+      width: 360,
+      height: 400,
+      backgroundColor: Colors. BACKGROUND,
+      elevation: 3,
+      marginTop: 50,
+      alignSelf: 'center',
+      borderRadius: 15,
+      paddingHorizontal: 20,
+    },
+    editImg: {
+      height: 45,
+      width: 45,
+      borderWidth: 1,
+      borderColor: '#DCDCDC',
+      borderRadius: 50,
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'flex-end',
+      marginRight: 20,
+      marginTop: -18,
+      backgroundColor: Colors.BACKGROUND
+    },
+    editTextInput: {
+      marginTop: 30,
+      borderBottomColor: Colors.BORDER,
+      borderBottomWidth: 0.5,
+      paddingBottom: 4,
+      letterSpacing: 0.5
+    }
     
   });
   
