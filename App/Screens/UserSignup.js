@@ -26,14 +26,15 @@ const UserSignup = () => {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [place, setPlace] = useState('');
-  const [panchayath, setPanchayath] = useState('');
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
 
-  const { usernameError, emailError, phoneError, passwordError, handleSignup, loading } = useLoginOrSignup(navigation)
+
+// --------------- navigation -------------------
+const navigation = useNavigation();
+const { usernameError, emailError, phoneError, passwordError, handleSignup, loading } = useLoginOrSignup(navigation)
   
-  // --------------- navigation -------------------
-  const navigation = useNavigation();
+  
 
   const onSignInClick = () => {
     navigation.navigate('SignInScreen');
@@ -41,6 +42,8 @@ const UserSignup = () => {
   // const onSignUpClick = () => {
   //   navigation.navigate('UserHome');
   // }
+
+  
 
   return (
     <KeyboardAwareScrollView
@@ -74,8 +77,6 @@ const UserSignup = () => {
 
           <SignupInput style={[styles.input, {marginTop: 20}]} icon={placeIcon} placeholder='Place' keyboardtype='default' onChangeText={(text)=>setPlace(text)}/>
           
-          <SignupInput style={[styles.input, {marginTop: 20}]} icon={panchayathIcon} placeholder='Panchayath' keyboardtype='default' onChangeText={(text)=>setPanchayath(text)}/>
-          
           <SignupInput style={[styles.input, {marginTop: 20}]} icon={passwordIcon} placeholder='Password' keyboardtype='default' onChangeText={(text)=>setPassword(text)}/>
           <Text style={{color: 'red'}}> { passwordError } </Text>
 
@@ -83,7 +84,7 @@ const UserSignup = () => {
           
           {/* ------------------ Signup button --------------- */}
           <View>{loading}</View>
-          <TouchableOpacity onPress={handleSignup}>
+          <TouchableOpacity onPress={() => handleSignup(username, email, password)}>
             <View style={[styles.button, {marginTop: 50}]}>
               <Text style={styles.buttonText}>SIGN UP</Text>
             </View>

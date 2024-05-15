@@ -12,7 +12,7 @@ const PasswordChange = () => {
   const navigation = useNavigation();
 
   const onIconClick = () => {
-    navigation.navigate('UserEditProfile')
+    navigation.goBack()
   }
   const onSave = () => {
     navigation.navigate('UserEditProfile')

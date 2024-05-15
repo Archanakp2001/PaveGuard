@@ -9,7 +9,7 @@ const AuthorityEdit = () => {
     // ------------ title ------------
     const navigation = useNavigation();
     const onIconClick = () => {
-        navigation.navigate('AuthorityProfile')
+        navigation.goBack();
     }
 
     // ----------- submit -------------

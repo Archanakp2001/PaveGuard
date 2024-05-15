@@ -1,8 +1,8 @@
 
 const login = async (username, password, setLoading, setPasswordError) => {
     const data = {username, password}
-    
-    const response = await fetch( '/api-token-auth/', {
+    console.log(data)
+    const response = await fetch( 'http://192.168.91.139:8000/api-token-auth/', {
       method: 'POST',
      
       headers: {

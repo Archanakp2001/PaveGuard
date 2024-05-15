@@ -11,7 +11,7 @@ const UserFaqs = () => {
 
   const navigation = useNavigation();
   const onIconClick = () => {
-    navigation.navigate('UserProfile');
+    navigation.goBack();
   }
 
   return (

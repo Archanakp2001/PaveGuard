@@ -30,7 +30,8 @@ export default function SignInScreen() {
   }, []);
 
   
-
+  const navigation = useNavigation();
+  
 // --------------- set input data ------------
 const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
@@ -54,7 +55,7 @@ const handlePress = () => {
 
 
 // ---------------- Button sign in click ----------------
-const navigation = useNavigation();
+
 // const onSignIn = () => {
 //   navigation.navigate('User')
 //   ToastAndroid.show('Signed In!', ToastAndroid.SHORT);

@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.BACKGROUND,
       alignItems:'center',
       justifyContent: 'center',
+      paddingBottom: 50
     },
     container: {
       flex: 1,
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
       alignItems:'center',
       justifyContent: 'center',
       paddingTop: 30,
-      paddingBottom: 120
+      // paddingBottom: 120
     },
     imgcontainer: {
       height: 350,

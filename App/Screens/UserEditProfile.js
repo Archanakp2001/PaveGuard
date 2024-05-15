@@ -19,7 +19,7 @@ const UserEditProfile = () => {
     navigation.navigate('UserProfile')
   }
   const onIconClick = () => {
-    navigation.navigate('UserProfile')
+    navigation.goBack()
   }
 
   return (

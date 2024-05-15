@@ -16,7 +16,7 @@ const About = () => {
   // ---------------- Back Icon click --------------
   const navigation = useNavigation();
   const onIconClick = () => {
-    navigation.navigate('UserProfile');
+    navigation.goBack();
   }
 
   // --------------------- Terms of use popup ----------------------

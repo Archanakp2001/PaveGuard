@@ -29,15 +29,7 @@ const UserHome = () => {
 
         {/* --------------------- Searchbar --------------------- */}
         {/* <SearchBar onSearch={handleSearch}/> */}
-        {/* <AutoComplete /> */}
-        <GooglePlacesAutocomplete
-          placeholder="Type a place"
-          query={{key: 'AIzaSyAmp0ero6e6ZEUkodpzaNEwlmGZ7Kvi1Bk'}}
-          fetchDetails={true}
-          onPress={(data, details = null) => console.log(data, details)}
-          onFail={error => console.log(error)}
-          onNotFound={() => console.log('no results')}
-        />
+        <AutoComplete />
 
         {/* ------------------------ Map ------------------------ */}
         <View style={[{flex: 1}]}>

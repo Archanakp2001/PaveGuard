@@ -13,7 +13,7 @@ const UserFeedback = () => {
 
   const navigation = useNavigation();
   const onIconClick = () => {
-    navigation.navigate('UserProfile');
+    navigation.goBack();
   }
 
   // --------------- New feedback popup --------------------
