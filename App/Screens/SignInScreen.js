@@ -1,3 +1,4 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Image, TextInput, Button, TouchableOpacity, Linking, ToastAndroid } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -90,12 +91,12 @@ if (isLoading) {
 
                 {/* ---------- Inputs ----------- */}
                   <SigninInput icon={userIcon} placeholder='Username' keyboardtype='default' onChangeText={(text)=>setUsername(text)}/>
-                  <Text style={{color: 'red', paddingTop: 4}}> { usernameError } </Text>
+                  {usernameError ? <Text style={{ color: 'red', fontSize: 12, paddingLeft: 10, paddingTop: 5 }}>{usernameError}</Text> : null}
                   
                   <SigninInput icon={passwordIcon} placeholder='Password' keyboardtype='default' component='Password' onChangeText={(text)=>setPassword(text)} secureTextEntry={true}/>
-                  <Text style={{color: 'red', paddingTop: 4}}> { passwordError } </Text>
+                  {passwordError ? <Text style={{ color: 'red', fontSize: 12, paddingLeft: 10, paddingTop: 5 }}>{passwordError}</Text> : null}
                   
-                  <TouchableOpacity onPress={handlePress}><Text style={[styles.text, {textAlign: 'right'},{color:Colors.PRIMARY}]}>Forgot Password?</Text></TouchableOpacity>
+                  <TouchableOpacity onPress={handlePress}><Text style={[styles.text, {textAlign: 'right', color:Colors.PRIMARY, paddingTop: 10}]}>Forgot Password?</Text></TouchableOpacity>
 
 
                 {/* --------- Sign in button ----------- */}

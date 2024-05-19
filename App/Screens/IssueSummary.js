@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import MiniTitle from "../Components/MiniTitle";
 import tick from '../../assets/images/tick.png';
@@ -12,10 +12,13 @@ import Colors from "../Utils/Colors";
 
 const IssueSummary = () => {
 
+    const route = useRoute();
+    const { issueId, issueDate, issueWith, issueType, location, description, images } = route.params;
+
     // ------------- Back to Issues --------------
     const navigation = useNavigation();
     const onIconClick = () => {
-        navigation.navigate('User');
+        navigation.goBack();
     }
 
     return (
@@ -42,14 +45,13 @@ const IssueSummary = () => {
             {/* ---------------------- Issue summary ---------------------- */}
             <View style={style.issueSummary}>
                 
-                <View style={[{flexDirection: 'row', flexWrap: 'wrap', gap: 50}]}>
-
+                <View style={[{flexDirection: 'row', flexWrap: 'wrap', gap: 56}]}>
                     {/* Issue id */}
                     <View style={[{flexDirection:'row', gap: 5}]}>
                         <Image source={id} style={[{height: 42, width: 42, tintColor: '#B5B5B5' }]}/>
                         <View>
                             <Text style={[{color: Colors.PRIMARY}]}>Issue ID</Text>
-                            <Text style={[{fontWeight: 'bold'}]}>#8257910</Text>
+                            <Text style={[{fontWeight: 'bold'}]}>#{issueId}</Text>
                         </View>
                     </View>
                     {/* Issue date */}
@@ -57,15 +59,19 @@ const IssueSummary = () => {
                         <Image source={date} style={[{height: 42, width: 42, tintColor: '#B5B5B5' }]}/>
                         <View>
                             <Text style={[{color: Colors.PRIMARY}]}>Issue Date</Text>
-                            <Text style={[{fontWeight: 'bold'}]}>26/09/2024</Text>
+                            <Text style={[{fontWeight: 'bold'}]}>{issueDate}</Text>
                         </View>
                     </View>
+
+                </View>
+
+                <View style={[{flexDirection: 'row', flexWrap: 'wrap', gap: 40, marginTop: 30}]}>
                     {/* Issue with */}
                     <View style={[{flexDirection:'row', gap: 5}]}>
                         <Image source={alert} style={[{height: 42, width: 42, tintColor: '#B5B5B5' }]}/>
                         <View>
                             <Text style={[{color: Colors.PRIMARY}]}>Issue With</Text>
-                            <Text style={[{fontWeight: 'bold'}]}>Road</Text>
+                            <Text style={[{fontWeight: 'bold'}]}>{issueWith}</Text>
                         </View>
                     </View>
                     {/* Issue type */}
@@ -73,26 +79,38 @@ const IssueSummary = () => {
                         <Image source={alert} style={[{height: 42, width: 42, tintColor: '#B5B5B5' }]}/>
                         <View>
                             <Text style={[{color: Colors.PRIMARY}]}>Issue Type</Text>
-                            <Text style={[{fontWeight: 'bold'}]}>Pothole</Text>
+                            <Text style={[{fontWeight: 'bold'}]}>{issueType}</Text>
                         </View>
                     </View>
 
                 </View>
-                <View style={[style.line, {width: 340, alignSelf: 'center', marginTop: 30}]}/>
+                <View style={style.line}/>
 
 
+                {/* -------------- Location ------------------ */}
                 <View style={[{marginTop: 20}]}>
-                    <Text style={[{color: Colors.PRIMARY, marginBottom: 10, fontSize: 15}]}>Problem Description</Text>
-                    <Text style={[{lineHeight: 20, textAlign: 'justify'}]}>Detailed description of the problem like Lorem Ipsum Emoras.</Text>
+                    <Text style={[{color: Colors.PRIMARY, marginBottom: 5, fontSize: 15}]}>Location</Text>
+                    <Text style={[{lineHeight: 20, textAlign: 'justify'}]}>{location}</Text>
                 </View>
+                <View style={style.line}/>
+
+                {/* ---------------- Description ------------------- */}
+                <View style={[{marginTop: 20}]}>
+                    <Text style={[{color: Colors.PRIMARY, marginBottom: 5, fontSize: 15}]}>Problem Description</Text>
+                    <Text style={[{lineHeight: 20, textAlign: 'justify'}]}>{description}</Text>
+                </View>
+                <View style={style.line}/>
 
 
-                <View style={[{marginTop: 30}]}>
+                {/* ------------------- Images ------------------ */}
+                <View style={[{marginTop: 20}]}>
                     <Text style={[{color: Colors.PRIMARY, marginBottom: 10, fontSize: 15}]}>Images</Text>
                     <View style={[{flexDirection: 'row', gap: 10}]}>
-                        <View style={style.summaryImages}><Image style={[{height: 100, width: 100}]}/></View>
-                        <View style={style.summaryImages}><Image style={[{height: 100, width: 100}]}/></View>
-                        <View style={style.summaryImages}><Image style={[{height: 100, width: 100}]}/></View>
+                    {images.map((imageUri, index) => (
+                        <View key={index}>
+                            <Image source={{ uri: imageUri }} style={[{height: 100, width: 100, borderRadius: 8}]}/>
+                        </View>
+                    ))}
                     </View>
                 </View>
 
@@ -137,13 +155,14 @@ const style = StyleSheet.create({
         marginTop: 20,
         padding: 20
       },
-      summaryImages: {
-        height: 100,
-        width: 100,
-        borderWidth: 0.5,
-        borderRadius: 8,
-        borderColor: '#A3A3A3',
-      }
+      line: {
+        width: 340,
+        height: 1,
+        backgroundColor: Colors.HEADLINE,
+        marginVertical: 14,
+        alignSelf: 'center', 
+        marginTop: 15
+      },
       
 })
 export default IssueSummary;

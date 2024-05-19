@@ -24,6 +24,7 @@ import UserIssues from './App/Screens/UserIssues';
 import Authority from './App/Screens/Authority';
 import AuthorityProfile from './App/Screens/AuthorityProfile';
 import AuthorityEdit from './App/Screens/AuthorityEdit';
+import IssueReport from './App/Screens/IssueReport';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +46,7 @@ export default function App() {
           <Stack.Screen name="UserHome" component={UserHome} />
           <Stack.Screen name="UserProfile" component={UserProfile} />
           <Stack.Screen name="UserIssues" component={UserIssues} />
+          <Stack.Screen name="IssueReport" component={IssueReport} />
           <Stack.Screen name="UserEditProfile" component={UserEditProfile} />
           <Stack.Screen name="PasswordChange" component={PasswordChange} />
           <Stack.Screen name="UserFeedback" component={UserFeedback} />

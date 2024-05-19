@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
+import { API_ROOT } from "../../../apiroot";
 
 import login from "../auth/login";
 import signup from "../auth/signup";
@@ -9,18 +12,21 @@ const useLoginOrSignup = (navigation) => {
   const [emailError, setEmailError] = useState('')
   const [phoneError, setPhoneError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [confPasswordError, setConfPasswordError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
+  const clearErrors = () => {
     setUsernameError('')
     setEmailError('')
     setPhoneError('')
     setPasswordError('')
+    setConfPasswordError('')
 
-  }, );
+  };
   
 
-  const handleLogin = (username, password) => {
+  const handleLogin = async(username, password) => {
+    clearErrors();
     if(username == '')
     {
       setUsernameError('Username cannot be empty')
@@ -34,25 +40,28 @@ const useLoginOrSignup = (navigation) => {
 
     if(usernameError === '' && passwordError === ''){
       setLoading(true)
-      login(username, password, setLoading, setPasswordError).then((result) => {
-        console.log(result)
-        if(result.token){
-          setLoading(false)
-          navigation.navigate('User', {userDetails: result})
+      const result = await login(username, password, setLoading, setPasswordError);
+        if (result) {
+            navigation.navigate('User', { userDetails: result });
+        } else {
+            setLoading(false);
+            setPasswordError('Invalid credentials');
         }
-        else {
-          setLoading(false)
-          setPasswordError('Invalid credentials')
-        }
-      })
     }
   }
 
-  const handleSignup = async(username, email, password, confPassword) => {
-    console.log(username,email,password);
+
+  const handleSignup = async(username, email, password, phone, confPassword) => {
+    clearErrors();
+    console.log(username,email,password, phone, confPassword);
     if(username == '')
     {
       setUsernameError('Username cannot be empty')
+      return
+    }
+    if(phone == '')
+    {
+      setPhoneError('Phone cannot be empty')
       return
     }
     if(email == '')
@@ -60,11 +69,21 @@ const useLoginOrSignup = (navigation) => {
       setEmailError('Email id cannot be empty')
       return
     }
-    
-    if(password == '') {
+    if(password == '') 
+    {
       setPasswordError('Password cannot be empty')
       return
     }
+    if(confPassword == '') 
+    {
+      setConfPasswordError('Confirm Password cannot be empty')
+      return
+    }
+    if (password !== confPassword) {
+      setConfPasswordError('Passwords do not match');
+      return;
+    }
+
     setLoading(true)
     console.log("Signing up");
     signup(username, email, password).then( (response) => {
@@ -94,6 +113,7 @@ const useLoginOrSignup = (navigation) => {
           emailError,
           phoneError,
           passwordError,
+          confPasswordError,
 
           handleLogin,
           handleSignup,

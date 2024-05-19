@@ -2,7 +2,7 @@
 const signup = async (username, email, password) => {
     const data = {username, email, password};
     
-    const response = await fetch( 'http://192.168.91.139:8000/create-user/', {
+    const response = await fetch( 'http://192.168.31.91:8000/create-user/', {
       method: 'POST',
      
       headers: {

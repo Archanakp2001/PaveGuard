@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, ScrollView, TextInput, Pressable, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Dropdown } from 'react-native-element-dropdown';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import  * as FileSystem from 'expo-file-system'
+import * as ImagePicker from 'expo-image-picker';
 
 import cancel from '../../assets/images/cancel.png';
 import place from '../../assets/images/place.png';
 import addImage from '../../assets/images/addImage.png';
-import video from '../../assets/images/video.png';
+import videoIcon from '../../assets/images/video.png';
 import road from '../../assets/images/road.png';
 import bridge from '../../assets/images/bridge.png';
 import drain from '../../assets/images/drain.png';
 import tunnel from '../../assets/images/tunnel.png';
 import footpath from '../../assets/images/footpath.png';
 import others from '../../assets/images/others.png';
+import OpenCameraOrLibrary from '../Screens/OpenCameraOrLibrary';
+import Dropdown from './Dropdown';
+
 import Colors from '../Utils/Colors';
-import { useNavigation } from '@react-navigation/native';
+import { API_ROOT } from '../../apiroot';
 
 const data = [
   { label: 'Pothole', value: 'Pothole' },
@@ -25,20 +32,130 @@ const data = [
 
 const SlideUpView = ({ isVisible, onClose }) => {
 
-  // -------- Radio button -----------
+
+  // ----------- Launch camera and library for Image ---------------
+  const [imageUris, setImageUris] = useState([null, null, null]); // Array to store image URIs
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(null); // To track which Pressable is clicked
+
+  const togglePopup = () => {
+    setPopupVisible(prevState => !prevState);
+  };
+
+  const handlePress = (index) => {
+    if (!imageUris[index]) {
+      setCurrentIndex(index);
+      togglePopup();
+    }
+  };
+
+  const setImageUri = (uri) => {
+    const updatedImageUris = [...imageUris];
+    updatedImageUris[currentIndex] = uri;
+    setImageUris(updatedImageUris);
+    // togglePopup(); // Close the popup
+  };
+
+
+  // ----------------- post data ------------------
+  const [location, setLocation] = useState('')
+  const [image, setImage] = useState(null)
+  const [video, setVideo] = useState(null)
+  // Radio button 
   const [selectedOption, setSelectedOption] = useState(null);
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
   };
+  // Dropdown
+  const [type, setType] = useState(null);
+  const [description, setDescription] = useState('')
 
-  // -------- Dropdown --------
-  const [value, setValue] = useState(null);
+  // ------------------------- Launch gallery for video -----------------------
+  const handleVideoPicker = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos, // Specify video media type
+        allowsEditing: true,
+        quality: 1,
+      });
+  
+      if (!result.canceled) {
+        console.log('Selected video:', result.uri);
+        setVideo(result.uri); // Note: use result.uri for the selected video URI
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "Something went wrong while trying to open the gallery.");
+    }
+  };
 
-  // ------------- submit button -------------
+  // ------------------ submit button ------------------
   const navigation = useNavigation();
-  const onSubmit = () => {
-    navigation.navigate('IssueSummary');
-  }
+
+  const handleSubmit = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      console.log('Token:', token); // Add this line to check the token
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
+      const formData = new FormData();
+
+      if (imageUris[0]) {
+        const imageInfo = await FileSystem.getInfoAsync(imageUris[0]);
+        formData.append('image', {
+          uri: imageUris[0],
+          name: 'photo.jpg',
+          type: 'image/jpeg',
+        });
+      }
+
+      if (video) {
+        formData.append('video', {
+          uri: video,
+          name: 'video.mp4',
+          type: 'video/mp4',
+        });
+      }
+
+      formData.append('location', location);
+      formData.append('issue_with', selectedOption);
+      formData.append('issue_type', type);
+      formData.append('description', description);
+
+      console.log('Submitting complaint data:', formData);
+
+      const response = await axios.post(API_ROOT + '/api/complaints/', formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const { id, created_at } = response.data;
+
+      console.log('Complaint submitted:', response.data);
+      navigation.navigate('IssueSummary', {
+        issueId: id, 
+        issueDate: created_at,
+        issueWith: selectedOption,
+        issueType: type,
+        location: location,
+        description: description,
+        images: imageUris
+        // Add other data as needed
+      });
+    } catch (error) {
+      console.error('Error submitting complaint:', error.response ? error.response.data : error.message);
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      }
+    }
+  };
+
 
   return (
     <Modal
@@ -72,34 +189,48 @@ const SlideUpView = ({ isVisible, onClose }) => {
             {/* Location Input */}
             <View style={styles.locationInput}>
               <Image source={place} style={[{marginTop: 14}]}/>
-              <TextInput placeholder='Location' multiline={true}/>
+              <TextInput placeholder='Location' multiline={true} style={{width: 300}}value={location} onChangeText={setLocation}/>
             </View>
 
             {/* Upload image */}
             <View style={[{marginTop: 20}]}>
               <Text style={styles.miniHead}>Upload Images</Text>
               <View style={[{flexDirection: 'row', gap: 15}]}>
-                <View style={styles.uploadView}>
-                  <Image source={addImage} style={styles.uploadImage} />
-                </View>
-                <View style={styles.uploadView}>
-                  <Image source={addImage} style={styles.uploadImage} />
-                </View>
-                <View style={styles.uploadView}>
-                  <Image source={addImage} style={styles.uploadImage} />
-                </View>
+                  
+              {imageUris.map((imageUri, index) => (
+                <Pressable key={index} style={styles.uploadView} onPress={() => handlePress(index)}>
+                  {imageUri ? (
+                    <Image source={{ uri: imageUri }} style={styles.selectedImage} value={image} onChangeText={setImage}/>
+                  ) : (
+                    <Image source={addImage} style={styles.uploadImage} />
+                  )}
+                </Pressable>
+              ))}
+              <OpenCameraOrLibrary isVisible={isPopupVisible} onClose={togglePopup} setImageUri={setImageUri} />
+                  
               </View>
             </View>
             <View style={styles.line} />
 
             {/* Upload Video */}
-            <View style={[{marginTop: 20}]}>
+            {/* <View style={[{marginTop: 20}]}>
               <Text style={styles.miniHead}>Upload Video</Text>
-              <View style={styles.uploadView}>
-                <Image source={video} style={styles.uploadImage} />
-              </View>
+              <Pressable style={styles.uploadView} onPress={handleVideoPicker}>
+                {video ? (
+                  <Video
+                    source={{ uri: video }}
+                    value={video}
+                    onChange={setVideo}
+                    style={{ width: 200, height: 200 }}
+                    shouldPlay
+                    useNativeControls
+                  />
+                ) : (
+                  <Image source={videoIcon} style={styles.uploadImage}/>
+                )}
+              </Pressable>
             </View>
-            <View style={styles.line} />
+            <View style={styles.line} /> */}
 
             {/* Issue with */}
             <View style={[{marginTop: 20}]}>
@@ -161,9 +292,9 @@ const SlideUpView = ({ isVisible, onClose }) => {
                 valueField="value"
                 placeholder="Select item"
                 searchPlaceholder="Search..."
-                value={value}
+                value={type}
                 onChange={item => {
-                  setValue(item.value);
+                  setType(item.value);
                 }}
               />
             </View>
@@ -172,13 +303,15 @@ const SlideUpView = ({ isVisible, onClose }) => {
             {/* Description */}
             <View style={[{marginTop: 20}]}>
               <Text style={styles.miniHead}>Description</Text>
-              <View style={styles.description}><TextInput placeholder='Share your issue description' multiline={true}/></View>
+              <View style={styles.description}>
+                <TextInput placeholder='Share your issue description' multiline={true} value={description} onChangeText={setDescription}/>
+              </View>
             </View>
             {/* <View style={styles.line} /> */}
 
             {/* Submit button */}
             <View style={[{marginTop: 30}]}>
-              <TouchableOpacity style={styles.submitButton} onPress={onSubmit}>
+              <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Submit</Text>
               </TouchableOpacity>
             </View>
@@ -266,6 +399,12 @@ const styles = StyleSheet.create({
     width: 40, 
     alignSelf: 'center', 
     tintColor: '#A3A3A3'
+  },
+  selectedImage: {
+    height: 90,
+    width: 90,
+    borderRadius: 10,
+    marginLeft: -1
   },
 
   // ----------------- radio button ----------------
