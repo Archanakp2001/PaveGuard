@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, ScrollView, TextInput, Pressable, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import  * as FileSystem from 'expo-file-system'
@@ -155,6 +155,17 @@ const SlideUpView = ({ isVisible, onClose }) => {
       }
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      setLocation('');
+      setImageUris([null, null, null]);
+      setSelectedOption(null);
+      setType(null);
+      setDescription('');
+      setVideo(null);
+    }, [])
+  );
 
 
   return (

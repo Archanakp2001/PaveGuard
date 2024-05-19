@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { useFocusEffect } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import SearchBar from '../Components/SearchBar.js';
@@ -17,6 +18,13 @@ const UserHome = () => {
   const handleSearch = (location) => {
     console.log(location);
   };
+
+  // Reset isSlideUpVisible when the screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      setIsSlideUpVisible(false);
+    }, [])
+  );
   
   const [isSlideUpVisible, setIsSlideUpVisible] = useState(false);
 
