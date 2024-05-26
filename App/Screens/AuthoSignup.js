@@ -1,28 +1,67 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
 import { StatusBar } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import ImagePicker from 'react-native-image-picker';
 import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 
 import SignupInput from '../Components/SignupInput';
 
 import userIcon from './../../assets/images/user.png';
-import phone from './../../assets/images/phone.png';
-import email from './../../assets/images/email.png';
-import place from './../../assets/images/place.png';
-import panchayath from './../../assets/images/panchayath.png';
-import license from './../../assets/images/license.png';
-import password from './../../assets/images/password.png';
-import confirm from './../../assets/images/confPassword.png';
+import phoneIcon from './../../assets/images/phone.png';
+import emailIcon from './../../assets/images/email.png';
+import placeIcon from './../../assets/images/place.png';
+import departmentIcon from './../../assets/images/panchayath.png';
+import licenseIcon from './../../assets/images/license.png';
+import passwordIcon from './../../assets/images/password.png';
+import confirmIcon from './../../assets/images/confPassword.png';
 import User from './../../assets/images/signup_User.png';
-import add from './../../assets/images/add.png'
+import add from './../../assets/images/add.png';
+import deleteIcon from './../../assets/images/delete.png';
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
 
 const AuthoSignup = () => {
+
+  // ---------------- pass data ------------------
+  const [authoName, setAuthoName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [place, setPlace] = useState('');
+  const [department, setDepartment] = useState('');
+  const [license, setLicense] = useState('');
+  const [password, setPassword] = useState('');
+  const [confPassword, setConfPassword] = useState('');
+  const [imageUri, setImageUri] = useState(null);
+
+
+  // ---------------------- open gallery for profile photo --------------------
+  const openGallery = async () => {
+    // No permissions request is necessary for launching the image library
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      console.log("Image URI:", result.assets[0].uri);
+      setImageUri(result.assets[0].uri); // Note: use result.assets[0].uri for the captured image URI
+    }
+  }catch (error) {
+    console.error(error);
+    Alert.alert("Error", "Something went wrong while trying to open the gallery.");
+  }
+  };
+
+  const handleDelete = () => {
+    setImageUri(null);
+  }
+
 
   const navigation = useNavigation();
 
@@ -34,39 +73,17 @@ const AuthoSignup = () => {
     navigation.navigate('Authority')
   }
 
-  const selectFromGallery = () => {
-    console.log(ImagePicker);
-    const options = {
-      title: 'Select Image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        const source = { uri: response.uri };
-        console.log(source); // Handle the selected image source
-      }
-    });
-  };
 
 
 
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={styles.maincontainer}
-      resetScrollToCoords={{ x: 0, y: 0 }}
-      scrollEnabled={true}
-      showsVerticalScrollIndicator={false} >
+    <View style={styles.container}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.maincontainer}
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false} >
 
-
-      <View style={styles.container}>
 
         <StatusBar style='auto'/>
 
@@ -77,22 +94,33 @@ const AuthoSignup = () => {
         </View>
 
         {/* ------------- Profile pic ------------- */}
-        <View style={[styles.categoryIcon, {height: 100}, {width: 100}, ]}>
-          <Image style={[{height: 80},{width: 80}, {marginTop: 10}]} source={User}/>
-          <Pressable onPress={selectFromGallery}><Image source={add} style={[{marginLeft: 60}, {marginTop: -6}]} /></Pressable>
-        </View>
+        <Pressable onPress={openGallery} style={[styles.categoryIcon, {height: 100, width: 100} ]}>
+          {imageUri ? (
+            <View>
+              <Image style={{width: 100, height: 100, borderRadius: 50, marginTop: 10}} source={{ uri: imageUri }} />
+              <Pressable onPress={handleDelete}><Image source={deleteIcon} style={{marginLeft: 80, marginTop: -6, height: 15, width: 15}} /></Pressable>
+            </View>
+          ) : (
+            <View>
+              <Image style={[{ height: 80, width: 80, marginTop: 10 }]} source={User} />
+              <Image source={add} style={[{marginLeft: 60}, {marginTop: -6}]} />
+            </View>
+            
+          )}
+          
+        </Pressable>
         
         {/* ------------- Details ------------- */}
         <View>
 
-          <SignupInput style={[styles.input, {marginTop: 15}]} icon={userIcon} placeholder='Authority Name' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 15}]} icon={phone} placeholder='Phone no' keyboardtype='numeric'/>
-          <SignupInput style={[styles.input, {marginTop: 15}]} icon={email} placeholder='Email id' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 15}]} icon={place} placeholder='Place' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 15}]} icon={panchayath} placeholder='Department' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 15}]} icon={license} placeholder='License no' keyboardtype='default'/>
-          <SignupInput style={[styles.input, {marginTop: 15}]} icon={password} placeholder='Password' keyboardtype='default' secureTextEntry={true}/>
-          <SignupInput style={[styles.input, {marginTop: 15}]} icon={confirm} placeholder='Confirm Password' keyboardtype='default' secureTextEntry={true}/>        
+          <SignupInput style={[styles.input, {marginTop: 15}]} icon={userIcon} placeholder='Authority Name' keyboardtype='default' value={authoName} onChangeText={setAuthoName} />
+          <SignupInput style={[styles.input, {marginTop: 15}]} icon={phoneIcon} placeholder='Phone no' keyboardtype='numeric' value={phone} onChangeText={setPhone} />
+          <SignupInput style={[styles.input, {marginTop: 15}]} icon={emailIcon} placeholder='Email id' keyboardtype='default' value={email} onChangeText={setEmail} />
+          <SignupInput style={[styles.input, {marginTop: 15}]} icon={placeIcon} placeholder='Place' keyboardtype='default' value={place} onChangeText={setPlace} />
+          <SignupInput style={[styles.input, {marginTop: 15}]} icon={departmentIcon} placeholder='Department' keyboardtype='default' value={department} onChangeText={setDepartment} />
+          <SignupInput style={[styles.input, {marginTop: 15}]} icon={licenseIcon} placeholder='License no' keyboardtype='default' value={license} onChangeText={setLicense} />
+          <SignupInput style={[styles.input, {marginTop: 15}]} icon={passwordIcon} placeholder='Password' keyboardtype='default' secureTextEntry={true} value={password} onChangeText={setPassword} />
+          <SignupInput style={[styles.input, {marginTop: 15}]} icon={confirmIcon} placeholder='Confirm Password' keyboardtype='default' secureTextEntry={true} value={confPassword} onChangeText={setConfPassword} />        
           
           <TouchableOpacity onPress={onSignupClick}>
             <View style={[styles.button, {marginTop: 20}]}>
@@ -109,10 +137,15 @@ const AuthoSignup = () => {
                   
         </View>
 
-      </View>
+
+
+      </KeyboardAwareScrollView>
+
+        
+    </View>
     
         
-    </KeyboardAwareScrollView>
+    
   );
 };
 

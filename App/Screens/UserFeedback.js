@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import MiniTitle from '../Components/MiniTitle';
@@ -8,6 +8,9 @@ import NewFeedback from '../Components/NewFeedback';
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { API_ROOT } from '../../apiroot';
 
 const UserFeedback = () => {
 
@@ -23,6 +26,36 @@ const UserFeedback = () => {
     setIsPopupVisible(!isPopupVisible);
   };
 
+  // ---------------------- fetch feedbacks -----------------------
+  const [feedbacks, setFeedbacks] = useState([]);
+  const isFocused = useIsFocused(); // Hook to check if the screen is focused
+
+  const fetchFeedbacks = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.get(API_ROOT + '/api/feedbacks/', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      if (response.data && Array.isArray(response.data.results)) {
+        // Reverse the order of issues array to show recent issues first
+        const reversedFeeds = response.data.results.reverse();
+        setFeedbacks(reversedFeeds);
+        console.log(reversedFeeds);
+
+      } else {
+        console.error("Unexpected response format:", response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching issues:", error.message || error);
+    }
+  };
+
+useEffect (() => {
+  fetchFeedbacks();
+}, [isFocused]); // Fetch data when the screen is focused or refreshed
   
   return (
     <View style={styles.mainContainer}>
@@ -48,17 +81,12 @@ const UserFeedback = () => {
 
         {/* ------------------- Feedbacks ------------------ */}
         <View style={[{alignItems: 'center'}]}>
-          <View style={styles.feedbacks}>
-              <Text style={[{fontSize: 15, color: Colors.PRIMARY}]}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor</Text>
-          </View>
-
-          <View style={styles.feedbacks}>  
-              <Text style={[{fontSize: 15, color: Colors.PRIMARY}]}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor</Text>
-          </View>
-
-          <View style={styles.feedbacks}>  
-              <Text style={[{fontSize: 15, color: Colors.PRIMARY}]}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor</Text>
-          </View>
+                    {feedbacks.map((feedback, index) => (
+                        <View key={index} style={styles.feedbacks}>
+                            <Text style={{textAlign: 'right', color: Colors.PRIMARY}}>{new Date(feedback.created_at).toLocaleDateString()}</Text>
+                            <Text style={[{ fontSize: 15 }]}>{feedback.content}</Text>
+                        </View>
+                    ))}
         </View>
 
       </KeyboardAwareScrollView>

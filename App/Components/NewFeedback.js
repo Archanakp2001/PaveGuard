@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Modal, Text, TextInput, TouchableOpacity, Image, Button } from 'react-native';
 
 import styles from '../Utils/styles';
@@ -6,13 +6,46 @@ import styles from '../Utils/styles';
 import closeButton from './../../assets/images/closeButton.png';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../Utils/Colors';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_ROOT } from '../../apiroot';
 
 const NewFeedback = ({ isVisible, onClose }) => {
+
+    const [content, setContent] = useState('');
     const navigation = useNavigation();
-    const onSubmit = () => {
-        navigation.navigate('UserFeedback');
+
+    const onSubmit = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        console.log(token);
+
+        const formData = new FormData();
+        formData.append('content', content);
+        console.log('Submitting feedback', formData);
+
+        const response = await axios.post(API_ROOT + '/api/feedbacks/', formData, {
+          headers: {
+            Authorization: `Token ${token}`,
+            'Content-Type': 'multipart/form-data',
+          }
+        });
+        console.log('Feedback submitted', response.data)
+        navigation.navigate('UserFeedback')
         onClose();
-    }
+      } catch(error) {
+            console.error('Error submitting feedback:', error.message);
+            if (error.response) {
+                console.error('Response status:', error.response.status);
+                console.error('Response data:', error.response.data);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Request setup error:', error.message);
+            }
+      }
+    };
+  
 
     return (
       
@@ -32,7 +65,7 @@ const NewFeedback = ({ isVisible, onClose }) => {
           {/* ------------- window --------------- */}
           <View style={[styles.modalContent, {width: 360, height: 360}]}>
             <View>
-                <TextInput style={styles.newFeed} placeholder='Share your feedbacks ...' multiline={true} numberOfLines={10} textAlignVertical="top"/>
+                <TextInput style={styles.newFeed} placeholder='Share your feedbacks ...' multiline={true} numberOfLines={10} textAlignVertical="top" value={content} onChangeText={setContent}/>
             </View>
 
             <TouchableOpacity onPress={onSubmit} style={[{alignItems: 'center'}]}>
@@ -49,5 +82,5 @@ const NewFeedback = ({ isVisible, onClose }) => {
   };
   
   
-  export default NewFeedback;
+export default NewFeedback;
   

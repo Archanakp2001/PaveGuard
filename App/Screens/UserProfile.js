@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ProfileCard from '../Components/ProfileCard';
 import forward from '../../assets/images/forward.png';
 import styles from '../Utils/styles';
 import MainTitle from '../Components/MainTitle';
+import { API_ROOT } from '../../apiroot';
+
 
 const UserProfile = () => {
 
@@ -29,6 +33,34 @@ const UserProfile = () => {
     navigation.navigate('SignInScreen')
   }
 
+
+  // ----------------------- get username -------------------------
+  const [username, setUsername] = useState('');
+  const isFocused = useIsFocused(); // Hook to check if the screen is focused
+  const fetchUser = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.get(API_ROOT + '/user-profile/', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      if (response.data && response.data.username) {
+        setUsername(response.data.username);
+
+      } else {
+        console.error("Unexpected response format:", response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching username:", error.message || error);
+    }
+  };
+
+  useEffect (() => {
+    fetchUser();
+  }, [isFocused]); // Fetch data when the screen is focused or refreshed
+
   return (
     <View style={styles.mainContainer}>
       
@@ -37,7 +69,7 @@ const UserProfile = () => {
         <Text style={styles.mainHead}>Archana</Text>
         <View style={styles.mainLine} />
       </View> */}
-      <MainTitle title='Username'/>
+      <MainTitle title={username}/>
 
 
       {/* ---------------- Features ----------------- */}

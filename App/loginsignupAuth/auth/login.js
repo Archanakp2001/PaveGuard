@@ -5,7 +5,7 @@ const login = async (username, password, setLoading, setPasswordError) => {
     
     const data = {username, password}
     console.log(data)
-    
+
     const response = await fetch(  API_ROOT + '/api-token-auth/', {
       method: 'POST',
       headers: {
@@ -18,7 +18,7 @@ const login = async (username, password, setLoading, setPasswordError) => {
     if (response.ok) {
       await AsyncStorage.setItem('token', result.token);
     }
-    
+
     return result;
 }
     

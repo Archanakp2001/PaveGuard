@@ -1,9 +1,10 @@
 import React from "react";
-import { View, Image, TextInput } from "react-native";
+import { View, Image, TextInput, TouchableOpacity } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from "../Utils/styles";
+import passwordIcon from '../../assets/images/password.png';
 
 const SigninInput = ({icon, placeholder, component, keyboardtype, ...rest}) => {
-
 
     return (
 

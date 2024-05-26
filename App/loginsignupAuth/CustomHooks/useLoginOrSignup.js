@@ -41,7 +41,7 @@ const useLoginOrSignup = (navigation) => {
     if(usernameError === '' && passwordError === ''){
       setLoading(true)
       const result = await login(username, password, setLoading, setPasswordError);
-        if (result) {
+        if (result.token) {
             navigation.navigate('User', { userDetails: result });
         } else {
             setLoading(false);

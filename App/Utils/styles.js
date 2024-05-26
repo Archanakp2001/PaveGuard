@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     // ------------------ Sign In Screen --------------------
     maincontainer: {
       margin: 0,
-      backgroundColor: Colors.BACKGROUND,
       alignItems:'center',
       justifyContent: 'center',
       paddingBottom: 50
@@ -57,7 +56,7 @@ const styles = StyleSheet.create({
       
     },
     text: {
-      color: Colors.TEXT,
+      color: 'Colors.TEXT,'
     },
     button: {
       backgroundColor: Colors.PRIMARY,
@@ -233,7 +232,6 @@ const styles = StyleSheet.create({
 
     // ----------------- Feedbacks ----------------------
     feedbacks: {
-      height: 100,
       width: 360,
       backgroundColor: Colors.CARD,
       // elevation: 3,

@@ -146,7 +146,6 @@ const style = StyleSheet.create({
         color: '#5A5A5A'
       },
       issueSummary: {
-        height: 550,
         width: 360,
         borderWidth: 0.5,
         borderColor: Colors.BORDER,

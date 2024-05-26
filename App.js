@@ -25,6 +25,7 @@ import Authority from './App/Screens/Authority';
 import AuthorityProfile from './App/Screens/AuthorityProfile';
 import AuthorityEdit from './App/Screens/AuthorityEdit';
 import IssueReport from './App/Screens/IssueReport';
+import IssueStatusUpdate from './App/Screens/IssueStatusUpdate';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,6 +59,7 @@ export default function App() {
           <Stack.Screen name='Authority' component={Authority} />
           <Stack.Screen name='AuthorityProfile' component={AuthorityProfile} />
           <Stack.Screen name='AuthorityEdit' component={AuthorityEdit} />
+          <Stack.Screen name='IssueStatusUpdate' component={IssueStatusUpdate} />
         </Stack.Navigator>
       </NavigationContainer>
     </TouchableWithoutFeedback>

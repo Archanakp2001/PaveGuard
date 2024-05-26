@@ -1,11 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, ScrollView, TextInput, Pressable, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import  * as FileSystem from 'expo-file-system'
 import * as ImagePicker from 'expo-image-picker';
+import { Picker } from '@react-native-picker/picker';
 
 import cancel from '../../assets/images/cancel.png';
 import place from '../../assets/images/place.png';
@@ -18,17 +19,9 @@ import tunnel from '../../assets/images/tunnel.png';
 import footpath from '../../assets/images/footpath.png';
 import others from '../../assets/images/others.png';
 import OpenCameraOrLibrary from '../Screens/OpenCameraOrLibrary';
-import Dropdown from './Dropdown';
 
 import Colors from '../Utils/Colors';
 import { API_ROOT } from '../../apiroot';
-
-const data = [
-  { label: 'Pothole', value: 'Pothole' },
-  { label: 'Crack', value: 'Crack' },
-  { label: 'Blocked', value: 'Blocked' },
-  { label: 'Other', value: 'Other' },
-];
 
 const SlideUpView = ({ isVisible, onClose }) => {
 
@@ -67,8 +60,9 @@ const SlideUpView = ({ isVisible, onClose }) => {
     setSelectedOption(option);
   };
   // Dropdown
-  const [type, setType] = useState(null);
+  const [type, setType] = useState('Pothole');
   const [description, setDescription] = useState('')
+
 
   // ------------------------- Launch gallery for video -----------------------
   const handleVideoPicker = async () => {
@@ -89,6 +83,7 @@ const SlideUpView = ({ isVisible, onClose }) => {
     }
   };
 
+  
   // ------------------ submit button ------------------
   const navigation = useNavigation();
 
@@ -132,7 +127,7 @@ const SlideUpView = ({ isVisible, onClose }) => {
           Authorization: `Token ${token}`,
           'Content-Type': 'multipart/form-data',
         },
-      });
+      }); 
 
       const { id, created_at } = response.data;
 
@@ -290,26 +285,18 @@ const SlideUpView = ({ isVisible, onClose }) => {
             {/* Issue Type */}
             <View style={[{marginTop: 20}]}>
               <Text style={styles.miniHead}>Issue Type</Text>
-              <Dropdown
-                style={styles.dropdown}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={data}
-                search
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder="Select item"
-                searchPlaceholder="Search..."
-                value={type}
-                onChange={item => {
-                  setType(item.value);
-                }}
-              />
+              <View style={{height: 50, borderColor: '#A3A3A3', borderWidth: 0.5, borderRadius: 10, marginTop: 10, justifyContent: 'center'}}>
+                <Picker
+                  selectedValue={type}
+                  onValueChange={(itemValue, itemIndex) => setType(itemValue)}
+                  mode='dropdown' >
+                    <Picker.Item label="Pothole" value="Pothole" />
+                    <Picker.Item label="Crack" value="Crack" />
+                    <Picker.Item label="Blocked" value="Blocked" />
+                    <Picker.Item label="Other" value="Other" />
+                </Picker>
+              </View>
             </View>
-            {/* <View style={styles.line} /> */}
 
             {/* Description */}
             <View style={[{marginTop: 20}]}>

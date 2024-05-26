@@ -1,9 +1,10 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Image, TextInput, Button, TouchableOpacity, Linking, ToastAndroid } from 'react-native';
+import { Text, View, Image, TextInput, Button, TouchableOpacity, Linking } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 import LoadingScreen from './LoadingScreen';
 import SigninInput from '../Components/SigninInput';
@@ -25,7 +26,7 @@ export default function SignInScreen() {
   useEffect(() => {
     const delay = setTimeout(() => {
       setIsLoading(false); // Set isLoading to false after delay (simulated loading complete)
-    }, 2000); // Simulated loading time: 2 seconds
+    }, 2000); // Simulated loading time: 2 Authoritys
 
     return () => clearTimeout(delay); // Cleanup timer on component unmount
   }, []);
@@ -36,6 +37,14 @@ export default function SignInScreen() {
 // --------------- set input data ------------
 const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
+// State variable to track password visibility 
+const [showPassword, setShowPassword] = useState(false);  
+// Function to toggle the password visibility state 
+const toggleShowPassword = () => { 
+    setShowPassword(!showPassword); 
+}; 
+// const [userType, setUserType] = useState('User');
+
 
 const { usernameError, passwordError, handleLogin, loading } = useLoginOrSignup(navigation)
 
@@ -55,17 +64,10 @@ const handlePress = () => {
 }
 
 
-// ---------------- Button sign in click ----------------
-
-// const onSignIn = () => {
-//   navigation.navigate('User')
-//   ToastAndroid.show('Signed In!', ToastAndroid.SHORT);
-// }
-
 if (isLoading) {
   return <LoadingScreen />;
 }
-  
+
   return (
     <View style={styles.container}>
 
@@ -90,14 +92,58 @@ if (isLoading) {
 
 
                 {/* ---------- Inputs ----------- */}
-                  <SigninInput icon={userIcon} placeholder='Username' keyboardtype='default' onChangeText={(text)=>setUsername(text)}/>
+
+                  {/* --- username field --- */}
+                  <SigninInput icon={userIcon} placeholder='Username' keyboardtype='default' onChangeText={(text)=>setUsername(text)} />
                   {usernameError ? <Text style={{ color: 'red', fontSize: 12, paddingLeft: 10, paddingTop: 5 }}>{usernameError}</Text> : null}
                   
-                  <SigninInput icon={passwordIcon} placeholder='Password' keyboardtype='default' component='Password' onChangeText={(text)=>setPassword(text)} secureTextEntry={true}/>
+                  {/* --- password field --- */}
+                  <View style={{flexDirection: 'row', marginTop: 30,borderColor: Colors.BORDER,borderWidth: 0.4,width: 340,height: 50,borderRadius: 15}}> 
+                      <Image source={passwordIcon} style={[styles.inputicon, {marginRight: 10}]}/>
+                      <TextInput 
+                          // Set secureTextEntry prop to hide  
+                          //password when showPassword is false 
+                          secureTextEntry={!showPassword} 
+                          value={password} 
+                          onChangeText={setPassword} 
+                          style={{flex: 1, color: '#333', paddingVertical: 10, paddingRight: 10, fontSize: 16, letterSpacing: 1 }} 
+                          placeholder="Password"
+                          placeholderTextColor={Colors.TEXT}
+                      /> 
+                      <MaterialCommunityIcons 
+                          name={showPassword ? 'eye' : 'eye-off'} 
+                          size={24} 
+                          color="#aaa"
+                          style={{marginRight: 15, marginTop: 12}} 
+                          onPress={toggleShowPassword} 
+                      /> 
+                  </View>
                   {passwordError ? <Text style={{ color: 'red', fontSize: 12, paddingLeft: 10, paddingTop: 5 }}>{passwordError}</Text> : null}
-                  
+ 
+                  {/* -------- forgot password --------- */}
                   <TouchableOpacity onPress={handlePress}><Text style={[styles.text, {textAlign: 'right', color:Colors.PRIMARY, paddingTop: 10}]}>Forgot Password?</Text></TouchableOpacity>
 
+                  {/* User type */}
+                    {/* <View style={{ flexDirection: 'row', gap: 50, marginTop: 20 }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <RadioButton
+                          value="User"
+                          status={userType === 'User' ? 'checked' : 'unchecked'}
+                          onPress={() => setUserType('User')}
+                        />
+                        <Text>User</Text>
+                      </View>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <RadioButton
+                          value="Authority"
+                          status={userType === 'Authority' ? 'checked' : 'unchecked'}
+                          onPress={() => setUserType('Authority')}
+                        />
+                        <Text>Authority</Text>
+                      </View>
+                    </View> */}
+                  
+                  
 
                 {/* --------- Sign in button ----------- */}
                   <View>{loading}</View>
