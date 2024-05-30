@@ -6,5 +6,5 @@ export default {
     BORDER: '#464646',
     TEXT: '#696969',
     HEADLINE: '#D7D7D7', 
-    CARD: '#DBCEBC',
+    CARD: '#F1E8D4',
 }

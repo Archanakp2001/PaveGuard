@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, Image, StyleSheet, FlatList, Pressable, Alert, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 
@@ -13,6 +13,7 @@ import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
+import { CountsContext } from '../Contexts/CountsContext';
 
 const IssueStatusUpdate = () => {
   const route = useRoute();
@@ -25,7 +26,8 @@ const IssueStatusUpdate = () => {
   const [error, setError] = useState(null);
   const [images, setImages] = useState([]);     // for displaying images
   const [show, setShow] = useState(false);      // for displaying images
-  const [issueStatus, setIssueStatus] = useState('Issue Inspected');      // for status update
+  const [issueStatus, setIssueStatus] = useState('Issue Inspected');  
+  const { setCounts } = useContext(CountsContext);    // for status update
 
   useEffect(() => {
     const fetchIssueData = async () => {
@@ -40,6 +42,7 @@ const IssueStatusUpdate = () => {
         if (response.data) {
           console.log(response.data);
           setIssue(response.data);
+
           if (response.data.image) {
             setImages([response.data.image]); // Convert single image URL to an array
           }
@@ -80,14 +83,61 @@ const IssueStatusUpdate = () => {
 
       if (response.status === 200) {
         Alert.alert('Success', 'Status updated successfully');
+
+        // Fetch updated issues and recalculate counts
+        fetchIssues(token);
+
         // Optionally, you can navigate back to the previous screen after successful update
         navigation.goBack();
       } else {
         Alert.alert('Error', 'Failed to update status');
       }
+
     } catch (error) {
       console.log('Error', error.message);
     }
+  };
+
+
+  // Fetch issues and recalculate counts
+  const fetchIssues = async (token) => {
+    try {
+        const response = await axios.get(API_ROOT + '/api/complaints/?user_specific=false', {
+            headers: {
+                Authorization: `Token ${token}`, // Include the token in the headers
+            },
+        });
+
+        if (response.data && Array.isArray(response.data.results)) {
+            const issues = response.data.results.reverse();
+            console.log(issues)
+            setCounts({
+                inspectedCount: issues.filter(issue => issue.status === 'Issue Inspected' || issue.status === 'Work Issued' || issue.status === 'Work In-Progress' || issue.status === 'Work Completed').length,
+                workIssuedCount: issues.filter(issue => issue.status === 'Work Issued').length,
+                workCompletedCount: issues.filter(issue => issue.status === 'Work Completed').length,
+                totalIssues: issues.length,
+            });
+        } else {
+            console.error("Unexpected response format:", response.data);
+        }
+    } catch (error) {
+        console.error("Error fetching issues:", error.message || error);
+    }
+  };
+
+
+  // -------------------- Show fullscreen images on click -----------------------
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageClick = (imageUri) => {
+    setSelectedImage(imageUri);
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setSelectedImage(null);
   };
 
 
@@ -95,14 +145,15 @@ const IssueStatusUpdate = () => {
     if (!issue) {
       return null; // or a placeholder
     }
+
     
     return (
       <View>
 
         <View style={{flexDirection: 'row', marginTop: 15, alignSelf: 'center'}}>
           <View  style={{height: 0.5, width: 100, backgroundColor: Colors.PRIMARY, marginTop: 13}}/>
-          <Text style={{fontWeight: 'bold'}}>  User : </Text>
-          <Text>{issue.user.username}  </Text>
+            <Text style={{fontWeight: 'bold'}}>  User : </Text>
+            <Text>{issue.user.username}  </Text>
           <View  style={{height: 0.5, width: 100, backgroundColor: Colors.PRIMARY, marginTop: 13}}/>
         </View>
         
@@ -171,15 +222,28 @@ const IssueStatusUpdate = () => {
           {/* Images */}
           <View style={{ marginTop: 20 }}>
             <Text style={{ color: Colors.PRIMARY, marginBottom: 10, fontSize: 15 }}>Images</Text>
+            
             <View style={{ flexDirection: 'row', gap: 10 }}>
               {show && images.map((imageUri, index) => (
-                <View key={index}>
-                  <Image style={{ height: 100, width: 100 }} source={{ uri: imageUri }} />
-                </View>
+                <TouchableOpacity key={index} onPress={() => handleImageClick(imageUri)}>
+                  <Image style={{ height: 100, width: 100, borderRadius: 8 }} source={{ uri: imageUri }} />
+                </TouchableOpacity>
               ))}
             </View>
+
+            <Modal visible={modalVisible} transparent={true} animationType="fade" onRequestClose={handleCloseModal}>
+              <TouchableWithoutFeedback onPress={handleCloseModal}>
+                <View style={{flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)', justifyContent: 'center', alignItems: 'center'}}>
+                  {selectedImage && (
+                    <Image style={{width: '90%', height: '90%', resizeMode: 'contain'}} source={{ uri: selectedImage }} />
+                  )}
+                </View>
+              </TouchableWithoutFeedback>
+            </Modal>
+
           </View>
           <View style={[styles.line, { width: 340, alignSelf: 'center', marginTop: 20 }]} />
+
 
           {/* Track the Status */}
           <View style={{ marginTop: 20 }}>
@@ -190,7 +254,7 @@ const IssueStatusUpdate = () => {
                       selectedValue={issueStatus}
                       onValueChange={(itemValue, itemIndex) => setIssueStatus(itemValue)}
                       mode='dropdown' >
-                        <Picker.Item label="Issue Inspected" value="Issue inspected" />
+                        <Picker.Item label="Issue Inspected" value="Issue Inspected" />
                         <Picker.Item label="Work Issued" value="Work Issued" />
                         <Picker.Item label="Work In-Progress" value="Work In-Progress" />
                         <Picker.Item label="Work Completed" value="Work Completed" />

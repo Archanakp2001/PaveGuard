@@ -1,7 +1,7 @@
 import React, {useState, useCallback} from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, ScrollView, Button, Pressable } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import SearchBar from '../Components/SearchBar.js';
@@ -14,6 +14,8 @@ import SlideUpView from '../Components/SlideUpView.js';
 navigator.geolocation = require('react-native-geolocation-service');
 
 const UserHome = () => {
+
+  const navigation = useNavigation();
 
   const handleSearch = (location) => {
     console.log(location);
@@ -59,6 +61,7 @@ const UserHome = () => {
       
       </View>
 
+
       {/* ------------------- Post issue -------------------- */}
       <TouchableOpacity style={[{alignItems: 'center'}]} onPress={() => setIsSlideUpVisible(true)}>
         <View style={styles.issueButton}>
@@ -69,9 +72,10 @@ const UserHome = () => {
         isVisible={isSlideUpVisible}
         onClose={() => setIsSlideUpVisible(false)}
       />
-        
+
+
       {/* --------------------- About section ----------------- */}
-      <View style={[{marginHorizontal: 30, marginTop: 30}]}>
+      <View style={[{marginHorizontal: 25, marginTop: 30}]}>
         <Text style={[{color: Colors.PRIMARY, fontSize: 20, fontWeight: '600', marginBottom: 8}]}>About</Text>
         <Text style={[{color: Colors.TEXT, lineHeight: 20, textAlign: 'justify'}]}>PaveGuard is an Infrastructure Maintenance App that allows citizens to report road damage and navigate easily. 
         There is an option for users to report issues.
@@ -80,11 +84,30 @@ const UserHome = () => {
         </Text>
       </View>
 
+
       {/* --------------------- Gallery section ----------------- */}
-      <View style={[{marginHorizontal: 30, marginTop: 50}]}>
+      <View style={[{marginHorizontal: 25, marginTop: 30}]}>
         <Text style={[{color: Colors.PRIMARY, fontSize: 20, fontWeight: '600', marginBottom: 10}]}>Gallery</Text>
         <ImageCarousel />
       </View>
+
+      
+      {/* ---------------- Help & Support section */}
+      <View style={{ marginHorizontal: 25, marginTop: 50 }}>
+          <Text style={{ color: Colors.PRIMARY, fontSize: 20, fontWeight: '600', marginBottom: 8 }}>Help & Support</Text>
+          <Text style={{ color: Colors.TEXT, lineHeight: 20, textAlign: 'justify' }}>
+            If you have any questions or need assistance, please visit our Help Center or contact our support team.
+          </Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Pressable style={{borderColor: Colors.PRIMARY, borderWidth: 1, padding: 10, alignItems: 'center', borderRadius: 8, width: 170}} title="FAQs" onPress={() => {navigation.navigate('UserFaqs')}}>
+              <Text>FAQs</Text>
+            </Pressable>
+            <Pressable style={{borderColor: Colors.PRIMARY, borderWidth: 1, padding: 10, alignItems: 'center', borderRadius: 8, width: 170}} title="FAQs" onPress={() => {navigation.navigate('UserFaqs')}}>
+              <Text>TUTORIALS</Text>
+            </Pressable>
+          </View>
+          
+        </View>
 
     </ScrollView>
 

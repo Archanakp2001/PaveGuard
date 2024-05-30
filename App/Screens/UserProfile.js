@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ToastAndroid } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,6 +9,7 @@ import forward from '../../assets/images/forward.png';
 import styles from '../Utils/styles';
 import MainTitle from '../Components/MainTitle';
 import { API_ROOT } from '../../apiroot';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 
 
 const UserProfile = () => {
@@ -29,9 +30,6 @@ const UserProfile = () => {
   const onAboutClick = () => {
     navigation.navigate('About')
   }
-  const onLogOut = () => {
-    navigation.navigate('SignInScreen')
-  }
 
 
   // ----------------------- get username -------------------------
@@ -48,10 +46,10 @@ const UserProfile = () => {
 
       if (response.data && response.data.username) {
         setUsername(response.data.username);
-
       } else {
         console.error("Unexpected response format:", response.data);
       }
+      
     } catch (error) {
       console.error("Error fetching username:", error.message || error);
     }
@@ -60,6 +58,20 @@ const UserProfile = () => {
   useEffect (() => {
     fetchUser();
   }, [isFocused]); // Fetch data when the screen is focused or refreshed
+
+
+  // ----------------- Logout -----------------------
+  const onLogOut = async () => {
+    try {
+      await AsyncStorage.removeItem('token');
+      console.log("Logged out successfully");
+      navigation.navigate('SignInScreen');
+      ToastAndroid.show('Logged out succesfully', ToastAndroid.SHORT)
+    } catch (error) {
+      console.error("Error logging out: ", error);
+    }
+    // navigation.navigate('SignInScreen')
+  };
 
   return (
     <View style={styles.mainContainer}>

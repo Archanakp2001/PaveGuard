@@ -20,11 +20,13 @@ const OpenCameraOrLibrary = ({ isVisible, onClose, setImageUri  }) => {
         return;
       }
 
-      const result = await ImagePicker.launchCameraAsync({
+      console.log("launching camera");
+      let result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
       });
+      console.log(result)
 
       if (!result.canceled) {
         console.log("Image URI:", result.assets[0].uri);

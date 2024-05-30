@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Timeline from 'react-native-timeline-flatlist';
 import axios from 'axios';
@@ -59,13 +59,49 @@ const IssueReport = () => {
     navigation.goBack();
   };
 
+
+  // -------------------- Show fullscreen images on click -----------------------
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageClick = (imageUri) => {
+      setSelectedImage(imageUri);
+      setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+      setModalVisible(false);
+      setSelectedImage(null);
+  };
+
+
+  // --------------------- Status -----------------------
   const trackData = [
-    { time: '09:00', title: 'ISSUE SENT' },
-    { time: '10:45', title: 'ISSUE INSPECTED' },
-    { time: '12:00', title: 'WORK ISSUED' },
-    { time: '14:00', title: 'WORK IN-PROGRESS' },
-    { time: '15:30', title: 'WORK COMPLETED' },
+    { title: 'Issue Reported' },
+    { title: 'Issue Inspected' },
+    { title: 'Work Issued' },
+    { title: 'Work In-Progress' },
+    { title: 'Work Completed' },
   ];
+
+  const getTimelineData = () => {
+    switch (issue.status) {
+      case 'Issue reported':
+        return trackData.slice(0, 1);
+      case 'Issue Inspected':
+        return trackData.slice(0, 2);
+      case 'Work Issued':
+        return trackData.slice(0, 3);
+      case 'Work In-Progress':
+        return trackData.slice(0, 4);
+      case 'Work Completed':
+        return trackData;
+      default:
+        return [];
+    }
+  };
+  
+
 
   const renderContent = () => {
     if (!issue) {
@@ -138,33 +174,50 @@ const IssueReport = () => {
         {/* Images */}
         <View style={{ marginTop: 30 }}>
           <Text style={{ color: Colors.PRIMARY, marginBottom: 10, fontSize: 15 }}>Images</Text>
+          
           <View style={{ flexDirection: 'row', gap: 10 }}>
             {show && images.map((imageUri, index) => (
-              <View key={index}>
-                <Image style={{ height: 100, width: 100 }} source={{ uri: imageUri }} />
-              </View>
+              <TouchableOpacity key={index} onPress={() => handleImageClick(imageUri)}>
+                <Image style={{ height: 100, width: 100, borderRadius: 8 }} source={{ uri: imageUri }} />
+              </TouchableOpacity>
             ))}
           </View>
+
+          <Modal visible={modalVisible} transparent={true} animationType="fade" onRequestClose={handleCloseModal}>
+            <TouchableWithoutFeedback onPress={handleCloseModal}>
+              <View style={{flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)', justifyContent: 'center', alignItems: 'center'}}>
+                {selectedImage && (
+                  <Image style={{width: '90%', height: '90%', resizeMode: 'contain'}} source={{ uri: selectedImage }} />
+                )}
+              </View>
+            </TouchableWithoutFeedback>
+          </Modal>
+
         </View>
+        <View style={[styles.line, { width: 340, alignSelf: 'center', marginTop: 20 }]} />
 
         {/* Track the Status */}
         <View style={{ marginTop: 20 }}>
+          <Text style={{ color: Colors.PRIMARY, marginBottom: 20, fontSize: 15 }}>Issue Status</Text>
+          
           <Timeline
-            data={trackData}
+            data={getTimelineData()}
             circleSize={16}
             circleColor='#998E7F'
             lineColor='#998E7F'
-            listViewStyle={{ height: 50 }}
-            timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
-            timeStyle={{ textAlign: 'center', backgroundColor: '#ff9797', color: 'white', paddingLeft: 50, borderRadius: 13 }}
-            descriptionStyle={{ color: 'gray' }}
+            listViewStyle={{ height: 50, marginTop: -20 }}
             options={{
-              style: { paddingTop: 15 },
+              style: { paddingTop: 15, },
             }}
             isUsingFlatlist={true}
             showTime={false}
+            titleStyle={{marginTop: -12, paddingBottom: 20}}
+            
           />
+
         </View>
+
+
       </View>
     );
   };

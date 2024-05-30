@@ -96,8 +96,10 @@ const ImageCarousel = () => {
                 </Pressable>
                 ))}
               </Animated.ScrollView>
+              
 
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+              {/* --------------- previous and next arrow ---------------- */}
+              {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
                 <Pressable
                   disabled={isFirstCard}
                   onPress={goToPrevious}
@@ -112,7 +114,7 @@ const ImageCarousel = () => {
                 >
                   <Image source={require('../../assets/images/forward.png')} style={{ height: 34, width: 34 }} />
                 </Pressable>
-              </View>
+              </View> */}
 
             </View>
 

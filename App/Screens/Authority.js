@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -11,10 +11,15 @@ import AuthorityProfile from './AuthorityProfile';
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
+import { NotificationContext } from '../Contexts/NotificationContext';
 
 const Tab = createBottomTabNavigator();
 
 const Authority = () => {
+
+  const { notifications } = useContext(NotificationContext);
+    const notificationCount = notifications.length;
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -74,7 +79,7 @@ const Authority = () => {
               style={{ width: 30, height: 30, tintColor: focused ? Colors.PRIMARY : '#B0B0B0' }}
             />
           ),
-          tabBarBadge: 2
+          tabBarBadge: notificationCount
         }}
       />
       <Tab.Screen

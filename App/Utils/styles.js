@@ -234,11 +234,11 @@ const styles = StyleSheet.create({
     feedbacks: {
       width: 360,
       backgroundColor: Colors.CARD,
-      // elevation: 3,
-      marginTop: 20,
-      borderRadius: 15,
+      marginBottom: 10,
+      borderRadius: 10,
       paddingVertical: 20,
       paddingHorizontal: 20,
+      elevation: 4
     },
     newFeed : {
       width: 320,
@@ -262,11 +262,10 @@ const styles = StyleSheet.create({
     // ----------------- Notifications --------------------
     notifications: {
       marginBottom: 30,
-      backgroundColor: Colors.BACKGROUND,
+      backgroundColor: Colors.CARD,
       elevation: 3,
       borderRadius: 15,
-      width: 380,
-      height: 80, 
+      width: 380, 
       padding: 10,
       flexDirection: 'row', 
       justifyContent: 'center',
@@ -275,8 +274,8 @@ const styles = StyleSheet.create({
 
     // ----------------- Issues ----------------------
     issues: {
-      backgroundColor: Colors.BACKGROUND,
-      elevation: 4,
+      backgroundColor: Colors.CARD,
+      elevation: 6,
       width: 380,
       height: 140,
       borderRadius: 15,

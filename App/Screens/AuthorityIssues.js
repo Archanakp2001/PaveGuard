@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { Text, View, Image, ScrollView, TouchableOpacity, RefreshControl, Alert, TextInput, Picker } from "react-native";
 import styles from "../Utils/styles";
 
 import MainTitle from "../Components/MainTitle";
@@ -9,31 +9,61 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { API_ROOT } from "../../apiroot";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CountsContext } from "../Contexts/CountsContext";
+import AuthorityHome from "./AuthorityHome";
+import Colors from "../Utils/Colors";
+
+const FilterComponent = ({ filterCriteria, setFilterCriteria }) => {
+    return (
+        <View style={{flexDirection: 'row', paddingHorizontal: 20, gap: 10, marginTop: -25, marginBottom: 5}}>
+            <Text style={{marginTop: 2}}>Filter by:</Text>
+            <TextInput
+                style={{borderColor: Colors.BORDER, borderWidth: 0.3, paddingHorizontal: 8, borderRadius: 5, width: 90, }}
+                placeholder="Issue With"
+                value={filterCriteria.issueWith}
+                onChangeText={(text) => setFilterCriteria({ ...filterCriteria, issueWith: text })}
+            />
+            <TextInput
+                style={{borderColor: Colors.BORDER, borderWidth: 0.3, paddingHorizontal: 8, borderRadius: 5, width: 90}}
+                placeholder="Location"
+                value={filterCriteria.location}
+                onChangeText={(text) => setFilterCriteria({ ...filterCriteria, location: text })}
+            />
+            <TextInput
+                style={{borderColor: Colors.BORDER, borderWidth: 0.3, paddingHorizontal: 8, borderRadius: 5, width: 90}}
+                placeholder="Status"
+                value={filterCriteria.issueType}
+                onChangeText={(text) => setFilterCriteria({ ...filterCriteria, status: text })}
+            />
+        </View>
+    );
+};
 
 const AuthorityIssues = () => {
     const [issues, setIssues] = useState([]);
-    const isFocused = useIsFocused(); // Hook to check if the screen is focused
+    const [refreshing, setRefreshing] = useState(false);
+    const [filterCriteria, setFilterCriteria] = useState({ issueWith: "", status: "", location: "" });
+    const isFocused = useIsFocused();
     const navigation = useNavigation();
+    const { setCounts } = useContext(CountsContext);
 
-
-    // ------------------ fetch all user issues -------------------
     const fetchIssues = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
             const response = await axios.get(API_ROOT + '/api/complaints/?user_specific=false', {
                 headers: {
-                    Authorization: `Token ${token}`, // Include the token in the headers
+                    Authorization: `Token ${token}`,
                 },
             });
 
             if (response.data && Array.isArray(response.data.results)) {
-                // Reverse the order of issues array to show recent issues first
                 const reversedIssues = response.data.results.reverse();
                 setIssues(reversedIssues);
-                // console.log(reversedIssues);
+                calculateCounts(reversedIssues);
             } else {
                 console.error("Unexpected response format:", response.data);
             }
+
         } catch (error) {
             console.error("Error fetching issues:", error.message || error);
         }
@@ -41,38 +71,68 @@ const AuthorityIssues = () => {
 
     useEffect(() => {
         fetchIssues();
-    }, [isFocused]); // Fetch data when the screen is focused or refreshed
+    }, [isFocused]);
 
+    const calculateCounts = (issues) => {
+        const inspectedCount = issues.filter(issue => issue.status === 'Issue Inspected' || issue.status === 'Work Issued' || issue.status === 'Work In-Progress' || issue.status === 'Work Completed').length;
+        const workIssuedCount = issues.filter(issue => issue.status === 'Work Issued').length;
+        const workCompletedCount = issues.filter(issue => issue.status === 'Work Completed').length;
 
-    // ------------- handle issue click -----------------
+        setCounts({
+            inspectedCount,
+            workIssuedCount,
+            workCompletedCount,
+            totalIssues: issues.length,
+        });
+    };
+
     const onIssueClick = (issueId) => {
         navigation.navigate('IssueStatusUpdate', { issueId });
+    };
+
+    const onRefresh = () => {
+        setRefreshing(true);
+        fetchIssues().finally(() => setRefreshing(false));
+    };
+
+    const filterIssues = () => {
+        return issues.filter(issue => {
+            return (
+                (filterCriteria.issueWith === "" || issue.issue_with.includes(filterCriteria.issueWith)) &&
+                (filterCriteria.status === "" || issue.status.includes(filterCriteria.status)) &&
+                (filterCriteria.location === "" || issue.location.includes(filterCriteria.location))
+            );
+        });
     };
 
     return (
         <View style={styles.mainContainer}>
 
-            {/* ----------------- Title ------------------- */}
             <MainTitle title='Issues' />
 
-            {/* ----------------- Issues ------------------ */}
-            <ScrollView>
-                <View style={[styles.cards, {marginBottom: 80}]}>
-                    {issues.map((issue) => (
-                        <TouchableOpacity key={issue.id} style={styles.issues} activeOpacity={0.8} onPress={() => onIssueClick(issue.id)}>
-                            <View style={[{ flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 0.8, borderColor: '#B3B3B3', paddingBottom: 10 }]}>
-                                <Text style={[{ fontWeight: 'bold' }]}>#{issue.id}</Text>
-                                <Text style={[{ fontWeight: 'bold' }]}>{issue.status.toUpperCase()}</Text>
-                            </View>
-                            <View style={[{ marginTop: 20, gap: 18 }]}>
-                                <View style={[{ flexDirection: 'row', gap: 10 }]}><Image source={place} /><Text>{issue.location}</Text></View>
-                                <View style={[{ flexDirection: 'row', gap: 10 }]}><Image source={calendar} style={[{ height: 24, width: 24 }]} /><Text>{new Date(issue.created_at).toLocaleDateString()}</Text></View>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
+            <FilterComponent filterCriteria={filterCriteria} setFilterCriteria={setFilterCriteria} />
+
+            <ScrollView refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
+                <View style={[styles.cards, {marginBottom: 80, marginTop: 30}]}>
+                    {filterIssues().length === 0 ? (
+                        <Text>No issues found</Text>
+                    ) : (filterIssues().map((issue) => (
+                            <TouchableOpacity key={issue.id} style={styles.issues} activeOpacity={0.8} onPress={() => onIssueClick(issue.id)}>
+                                <View style={[{ flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 0.8, borderColor: '#B3B3B3', paddingBottom: 10 }]}>
+                                    <Text style={[{ fontWeight: 'bold' }]}>#{issue.id}</Text>
+                                    <Text style={[{ fontWeight: 'bold' }]}>{issue.status.toUpperCase()}</Text>
+                                </View>
+                                <View style={[{ marginTop: 20, gap: 18 }]}>
+                                    <View style={[{ flexDirection: 'row', gap: 10 }]}><Image source={place} /><Text>{issue.location}</Text></View>
+                                    <View style={[{ flexDirection: 'row', gap: 10 }]}><Image source={calendar} style={[{ height: 24, width: 24 }]} /><Text>{new Date(issue.created_at).toLocaleDateString()}</Text></View>
+                                </View>
+                            </TouchableOpacity>
+                        ))
+                    )}
                 </View>
             </ScrollView>
-
         </View>
     );
 };

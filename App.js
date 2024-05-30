@@ -26,6 +26,9 @@ import AuthorityProfile from './App/Screens/AuthorityProfile';
 import AuthorityEdit from './App/Screens/AuthorityEdit';
 import IssueReport from './App/Screens/IssueReport';
 import IssueStatusUpdate from './App/Screens/IssueStatusUpdate';
+import { CountsProvider } from './App/Contexts/CountsContext';
+import Feedbacks from './App/Screens/Feedbacks';
+import { NotificationProvider } from './App/Contexts/NotificationContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,7 +37,8 @@ export default function App() {
 
   return (
     <TouchableWithoutFeedback onPress={()=> {Keyboard.dismiss();}}>
-      <NavigationContainer>
+      <CountsProvider><NotificationProvider>
+        <NavigationContainer>
         <Stack.Navigator 
           initialRouteName="SignInScreen"
           screenOptions={{
@@ -60,8 +64,10 @@ export default function App() {
           <Stack.Screen name='AuthorityProfile' component={AuthorityProfile} />
           <Stack.Screen name='AuthorityEdit' component={AuthorityEdit} />
           <Stack.Screen name='IssueStatusUpdate' component={IssueStatusUpdate} />
+          <Stack.Screen name='Feedbacks' component={Feedbacks} />
         </Stack.Navigator>
-      </NavigationContainer>
+        </NavigationContainer>
+      </NotificationProvider></CountsProvider>
     </TouchableWithoutFeedback>
 
   );

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Pressable, Alert } from 'react-native';
 import { StatusBar } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
@@ -22,6 +22,7 @@ import deleteIcon from './../../assets/images/delete.png';
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
+import axios from 'axios';
 
 const AuthoSignup = () => {
 
@@ -73,7 +74,7 @@ const AuthoSignup = () => {
     navigation.navigate('Authority')
   }
 
-
+  
 
 
   return (

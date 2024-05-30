@@ -1,30 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
+import { API_ROOT } from '../../apiroot';
 import MiniTitle from '../Components/MiniTitle';
-import NewFeedback from '../Components/NewFeedback';
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { API_ROOT } from '../../apiroot';
 
-const UserFeedback = () => {
+
+const Feedbacks = () => {
 
   const navigation = useNavigation();
   const onIconClick = () => {
     navigation.goBack();
   }
-
-  // --------------- New feedback popup --------------------
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-
-  const onNewFeedback = () => {
-    setIsPopupVisible(!isPopupVisible);
-  };
 
   // ---------------------- fetch feedbacks -----------------------
   const [feedbacks, setFeedbacks] = useState([]);
@@ -33,7 +26,7 @@ const UserFeedback = () => {
   const fetchFeedbacks = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await axios.get(API_ROOT + '/api/feedbacks/?user_specific=true', {
+      const response = await axios.get(API_ROOT + '/api/feedbacks/?user_specific=false', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -70,19 +63,10 @@ useEffect (() => {
         <MiniTitle title='Feedbacks' navigateTo={onIconClick}/>
 
 
-        {/* ----------------- New button ------------------ */}
-        <TouchableOpacity onPress={onNewFeedback} style={[{alignItems: 'center'}]}>
-          <View style={[styles.button, {width: 360, marginTop: 40}]}>
-            <Text style={[styles.buttonText, {letterSpacing: 2, fontSize: 18}]}>+ New</Text>
-          </View>
-        </TouchableOpacity>
-        <NewFeedback isVisible={isPopupVisible} onClose={onNewFeedback} />
-
-
         {/* ------------------- Feedbacks ------------------ */}
-        <View style={[{alignItems: 'center', marginTop: 30}]}>
+        <View style={{alignItems: 'center', marginTop: 30}}>
           {feedbacks.map((feedback, index) => (
-            <View key={index} style={styles.feedbacks}>
+            <View key={index} style={[styles.feedbacks, {marginBottom: 20}]}>
               <Text style={{textAlign: 'right', color: Colors.PRIMARY}}>{new Date(feedback.created_at).toLocaleDateString()}</Text>
               <Text style={[{ fontSize: 15 }]}>{feedback.content}</Text>
             </View>
@@ -96,4 +80,4 @@ useEffect (() => {
   );
 };
 
-export default UserFeedback;
+export default Feedbacks;

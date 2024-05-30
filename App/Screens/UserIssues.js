@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, Alert, TextInput, RefreshControl } from 'react-native';
 import axios from 'axios';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,12 +9,42 @@ import calendar from '../../assets/images/calendar.png';
 import alert from '../../assets/images/alert.png';
 import styles from '../Utils/styles';
 import { API_ROOT } from '../../apiroot';
+import Colors from '../Utils/Colors';
+
+const FilterComponent = ({ filterCriteria, setFilterCriteria }) => {
+  return (
+      <View style={{flexDirection: 'row', paddingHorizontal: 20, gap: 10, marginTop: -30, marginBottom: 5}}>
+          <Text style={{marginTop: 2}}>Filter by:</Text>
+          <TextInput
+              style={{borderColor: Colors.BORDER, borderWidth: 0.3, paddingHorizontal: 8, borderRadius: 5, width: 90, }}
+              placeholder="Issue With"
+              value={filterCriteria.issueWith}
+              onChangeText={(text) => setFilterCriteria({ ...filterCriteria, issueWith: text })}
+          />
+          <TextInput
+              style={{borderColor: Colors.BORDER, borderWidth: 0.3, paddingHorizontal: 8, borderRadius: 5, width: 90}}
+              placeholder="Location"
+              value={filterCriteria.location}
+              onChangeText={(text) => setFilterCriteria({ ...filterCriteria, location: text })}
+          />
+          <TextInput
+              style={{borderColor: Colors.BORDER, borderWidth: 0.3, paddingHorizontal: 8, borderRadius: 5, width: 90}}
+              placeholder="Status"
+              value={filterCriteria.issueType}
+              onChangeText={(text) => setFilterCriteria({ ...filterCriteria, status: text })}
+          />
+      </View>
+  );
+};
+
 
 const UserIssues = () => {
   const [issues, setIssues] = useState([]);
   const isFocused = useIsFocused(); // Hook to check if the screen is focused
   const navigation = useNavigation();
-  const [deleteTimeout, setDeleteTimeout] = useState(null);
+  const [filterCriteria, setFilterCriteria] = useState({ issueWith: "", status: "", location: "" });
+  const [refreshing, setRefreshing] = useState(false);
+
 
   const fetchIssues = async () => {
     try {
@@ -42,30 +72,20 @@ const UserIssues = () => {
     fetchIssues();
   }, [isFocused]); // Fetch data when the screen is focused or refreshed
 
+
+  // ------------------- Handle issue click ---------------------
   const onIssueClick = (issueId) => {
       navigation.navigate('IssueReport', { issueId });
   };
 
-  const startDeleteTimer = (issueId) => {
-    const timeout = setTimeout(() => {
-      handleDeleteConfirmation(issueId);
-    }, 200); // Adjust the duration as needed
-    setDeleteTimeout(timeout);
-  };
-
-  const cancelDeleteTimer = () => {
-    if (deleteTimeout) {
-      clearTimeout(deleteTimeout);
-      setDeleteTimeout(null);
-    }
-  };
-
+  
+  // ---------------- Delete issue -------------------
   const handleDeleteConfirmation = (issueId) => {
     Alert.alert(
       'Delete Issue',
       'Are you sure you want to delete this issue?',
       [
-        { text: 'Cancel', style: 'cancel', onPress: cancelDeleteTimer },
+        { text: 'Cancel', style: 'cancel' },
         { text: 'Delete', onPress: () => onDeleteIssue(issueId) },
       ],
       { cancelable: true }
@@ -87,22 +107,46 @@ const UserIssues = () => {
     }
   };
 
+
+  // ----------------- fetch issues -----------------------
+  const filterIssues = () => {
+    return issues.filter(issue => {
+        return (
+            (filterCriteria.issueWith === "" || issue.issue_with.includes(filterCriteria.issueWith)) &&
+            (filterCriteria.status === "" || issue.status.includes(filterCriteria.status)) &&
+            (filterCriteria.location === "" || issue.location.includes(filterCriteria.location))
+        );
+    });
+  };
+
+
+  // ----------------- refresh the issues ----------------
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchIssues().finally(() => setRefreshing(false));
+  };
+
+
   return (
     <View style={[styles.mainContainer, { paddingBottom: 80 }]}>
       <MainTitle title='Issues' />
 
-      <ScrollView>
-        <View style={styles.cards}>
-          {issues.length === 0 ? (
+      <FilterComponent filterCriteria={filterCriteria} setFilterCriteria={setFilterCriteria} />
+
+      <ScrollView refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+
+        <View style={[styles.cards, {marginTop: 25}]}>
+          {filterIssues().length === 0 ? (
             <Text>No issues found.</Text>
           ) : (
-            issues.map((issue) => (
+            filterIssues().map((issue) => (
               <TouchableOpacity
                 key={issue.id}
                 style={styles.issues}
                 onPress={() => onIssueClick(issue.id)}
-                onPressIn={() => startDeleteTimer(issue.id)}
-                onPressOut={cancelDeleteTimer}
+                onLongPress={() => handleDeleteConfirmation(issue.id)}
                 activeOpacity={0.8}>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 0.8, borderColor: '#B3B3B3', paddingBottom: 10 }}>

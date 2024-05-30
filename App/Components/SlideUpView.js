@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, ScrollView, TextInput, Pressable, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -19,12 +19,15 @@ import tunnel from '../../assets/images/tunnel.png';
 import footpath from '../../assets/images/footpath.png';
 import others from '../../assets/images/others.png';
 import OpenCameraOrLibrary from '../Screens/OpenCameraOrLibrary';
+import { NotificationContext } from '../Contexts/NotificationContext';
 
 import Colors from '../Utils/Colors';
 import { API_ROOT } from '../../apiroot';
 
 const SlideUpView = ({ isVisible, onClose }) => {
 
+  // -------------------- notifications on submitting issue ----------------------
+  const { addNotification } = useContext(NotificationContext);
 
   // ----------- Launch camera and library for Image ---------------
   const [imageUris, setImageUris] = useState([null, null, null]); // Array to store image URIs
@@ -131,6 +134,15 @@ const SlideUpView = ({ isVisible, onClose }) => {
 
       const { id, created_at } = response.data;
 
+      // Add the new notification to the context
+      addNotification({
+        id,
+        title: 'New Issue Reported',
+        location,
+        date: created_at,
+        issueId: id,
+      });
+      
       console.log('Complaint submitted:', response.data);
       navigation.navigate('IssueSummary', {
         issueId: id, 

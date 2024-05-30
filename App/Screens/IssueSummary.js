@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import MiniTitle from "../Components/MiniTitle";
@@ -20,6 +20,21 @@ const IssueSummary = () => {
     const onIconClick = () => {
         navigation.goBack();
     }
+
+
+    // -------------------- Show fullscreen images on click -----------------------
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleImageClick = (imageUri) => {
+        setSelectedImage(imageUri);
+        setModalVisible(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalVisible(false);
+        setSelectedImage(null);
+    };
 
     return (
         <View style={[style.mainContainer, {paddingBottom: 50}]}>
@@ -105,13 +120,25 @@ const IssueSummary = () => {
                 {/* ------------------- Images ------------------ */}
                 <View style={[{marginTop: 20}]}>
                     <Text style={[{color: Colors.PRIMARY, marginBottom: 10, fontSize: 15}]}>Images</Text>
+                    
                     <View style={[{flexDirection: 'row', gap: 10}]}>
                     {images.map((imageUri, index) => (
-                        <View key={index}>
+                        <TouchableOpacity key={index} onPress={() => handleImageClick(imageUri)}>
                             <Image source={{ uri: imageUri }} style={[{height: 100, width: 100, borderRadius: 8}]}/>
-                        </View>
+                        </TouchableOpacity>
                     ))}
                     </View>
+
+                    <Modal visible={modalVisible} transparent={true} animationType="fade" onRequestClose={handleCloseModal}>
+                        <TouchableWithoutFeedback onPress={handleCloseModal}>
+                            <View style={{flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)', justifyContent: 'center', alignItems: 'center'}}>
+                            {selectedImage && (
+                                <Image style={{width: '90%', height: '90%', resizeMode: 'contain'}} source={{ uri: selectedImage }} />
+                            )}
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </Modal>
+
                 </View>
 
 
