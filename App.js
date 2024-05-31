@@ -29,6 +29,7 @@ import IssueStatusUpdate from './App/Screens/IssueStatusUpdate';
 import { CountsProvider } from './App/Contexts/CountsContext';
 import Feedbacks from './App/Screens/Feedbacks';
 import { NotificationProvider } from './App/Contexts/NotificationContext';
+import { UserNotificationsProvider } from './App/Contexts/UserNotificationsContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,7 +38,7 @@ export default function App() {
 
   return (
     <TouchableWithoutFeedback onPress={()=> {Keyboard.dismiss();}}>
-      <CountsProvider><NotificationProvider>
+      <CountsProvider><NotificationProvider><UserNotificationsProvider>
         <NavigationContainer>
         <Stack.Navigator 
           initialRouteName="SignInScreen"
@@ -67,7 +68,7 @@ export default function App() {
           <Stack.Screen name='Feedbacks' component={Feedbacks} />
         </Stack.Navigator>
         </NavigationContainer>
-      </NotificationProvider></CountsProvider>
+      </UserNotificationsProvider></NotificationProvider></CountsProvider>
     </TouchableWithoutFeedback>
 
   );

@@ -18,7 +18,13 @@ const Tab = createBottomTabNavigator();
 const Authority = () => {
 
   const { notifications } = useContext(NotificationContext);
-    const notificationCount = notifications.length;
+  const notificationCount = notifications.length;
+
+  const count = () => {
+    {notificationCount !== 0 && (
+       notificationCount
+    )}
+  }
 
   return (
     <Tab.Navigator

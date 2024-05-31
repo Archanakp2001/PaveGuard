@@ -1,20 +1,26 @@
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // Import screen components
 import userHome from './UserHome';
 import userIssues from './UserIssues';
-import userNotifications from './UserNoti';
 import userProfile from './UserProfile';
+import UserNoti from './UserNoti';
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
+import { UserNotificationsContext } from '../Contexts/UserNotificationsContext';
+
 
 const Tab = createBottomTabNavigator();
 
 const User = () => {
+
+  const { userNotifications } = useContext(UserNotificationsContext);
+  const notificationCount = userNotifications.length;
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -65,7 +71,7 @@ const User = () => {
       />
       <Tab.Screen
         name="Notifications"
-        component={userNotifications}
+        component={UserNoti}
         options={{
           tabBarLabel: 'Notifications',
           tabBarIcon: ({ focused }) => (
@@ -74,7 +80,7 @@ const User = () => {
               style={{ width: 30, height: 30, tintColor: focused ? Colors.PRIMARY : '#B0B0B0' }}
             />
           ),
-          tabBarBadge: 2
+          tabBarBadge: notificationCount
         }}
       />
       <Tab.Screen

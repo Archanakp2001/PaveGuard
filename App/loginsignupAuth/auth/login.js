@@ -18,7 +18,7 @@ const login = async (username, password, setLoading, setPasswordError) => {
     if (response.ok) {
       await AsyncStorage.setItem('token', result.token);
     }
-
+    
     return result;
 }
     

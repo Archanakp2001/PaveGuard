@@ -14,6 +14,8 @@ import Colors from '../Utils/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { CountsContext } from '../Contexts/CountsContext';
+import { UserNotificationsContext } from '../Contexts/UserNotificationsContext';
+
 
 const IssueStatusUpdate = () => {
   const route = useRoute();
@@ -28,6 +30,7 @@ const IssueStatusUpdate = () => {
   const [show, setShow] = useState(false);      // for displaying images
   const [issueStatus, setIssueStatus] = useState('Issue Inspected');  
   const { setCounts } = useContext(CountsContext);    // for status update
+  const { addUserNotification } = useContext(UserNotificationsContext); 
 
   useEffect(() => {
     const fetchIssueData = async () => {
@@ -86,6 +89,15 @@ const IssueStatusUpdate = () => {
 
         // Fetch updated issues and recalculate counts
         fetchIssues(token);
+
+        // Add notification
+        addUserNotification({
+          id: new Date().getTime(),
+          title: `Status updated to ${issueStatus}`,
+          issueId: issue.id,
+          location: issue.location,
+          user: issue.user.username,
+        });
 
         // Optionally, you can navigate back to the previous screen after successful update
         navigation.goBack();
