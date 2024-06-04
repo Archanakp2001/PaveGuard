@@ -40,6 +40,7 @@ const useLoginOrSignup = (navigation) => {
 
     if(usernameError === '' && passwordError === ''){
       setLoading(true)
+      
       const result = await login(username, password, setLoading, setPasswordError);
         if (result.token) {
             navigation.navigate('User', { userDetails: result });
@@ -47,13 +48,14 @@ const useLoginOrSignup = (navigation) => {
             setLoading(false);
             setPasswordError('Invalid credentials');
         }
+
     }
   }
 
 
-  const handleSignup = async(username, email, password, phone, confPassword) => {
+  const handleSignup = async(username, email, password, phone, place, confPassword) => {
     clearErrors();
-    console.log(username,email,password, phone, confPassword);
+    console.log(username, email, password, phone, place, confPassword);
     if(username == '')
     {
       setUsernameError('Username cannot be empty')
@@ -80,13 +82,14 @@ const useLoginOrSignup = (navigation) => {
       return
     }
     if (password !== confPassword) {
-      setConfPasswordError('Passwords do not match');
-      return;
+      setConfPasswordError('Passwords do not match')
+      return
     }
 
     setLoading(true)
     console.log("Signing up");
-    signup(username, email, password).then( (response) => {
+
+    signup(username, email, password, phone, place).then( (response) => {
       console.log(response);
       setLoading(false)
       if(response.token) {
@@ -100,6 +103,9 @@ const useLoginOrSignup = (navigation) => {
             setEmailError(response.email[0])
         if(response.password)
             setPasswordError(response.password[0])
+        if (response.profile) {
+          if (response.profile.phone) setPhoneError(response.profile.phone[0]);
+      }
       }
       
     })

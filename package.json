@@ -24,6 +24,7 @@
     "@rnmapbox/maps": "^10.1.24",
     "@stadiamaps/maplibre-search-box": "^1.0.1",
     "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12",
     "deprecated-react-native-prop-types": "^5.0.0",
     "expo": "^51.0.2",
     "expo-av": "^14.0.5",

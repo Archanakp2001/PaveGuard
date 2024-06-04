@@ -70,9 +70,36 @@ const AuthoSignup = () => {
     navigation.navigate('SignInScreen')
   }
 
+  // commented out ---------------------------
+  // const onSignupClick = () => {
+  //   navigation.navigate('Authority')
+  // }
+  // upto here -----------------------
+
   const onSignupClick = () => {
-    navigation.navigate('Authority')
-  }
+    const data = {
+        user: {
+            username: authoName,
+            password: password,
+            email: email,
+        },
+        phone_no: phone,
+        place: place,
+        authority_name: authoName,
+        department: department,
+        license_no: license,
+    };
+
+    axios.post('http://192.168.31.91:8000/authority_signup/', data)
+        .then(response => {
+            console.log(response.data);
+            // Handle successful signup, navigate to login screen
+            navigation.navigate('SignInScreen');
+        }).catch(error => {
+            console.error(error);
+            // Handle signup error
+        });
+};
 
   
 

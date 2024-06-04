@@ -225,9 +225,10 @@ const styles = StyleSheet.create({
       width: 350,
       height: 50,
       borderColor: Colors.TEXT,
-      color: Colors.TEXT,
+      color: '#000',
       letterSpacing: 1,
-      marginBottom: 30
+      marginBottom: 30,
+      fontWeight: '500'
     },
 
     // ----------------- Feedbacks ----------------------
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
 
     // ----------------- Notifications --------------------
     notifications: {
-      marginBottom: 30,
+      marginBottom: 20,
       backgroundColor: Colors.CARD,
       elevation: 3,
       borderRadius: 15,

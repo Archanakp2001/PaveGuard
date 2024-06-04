@@ -53,6 +53,17 @@ export const UserNotificationsProvider = ({ children }) => {
         }
     };
 
+    // Function to remove a user notification by ID
+    const removeUserNotification = async (notificationId) => {
+        try {
+            const updatedNotifications = userNotifications.filter(notification => notification.id !== notificationId);
+            setUserNotifications(updatedNotifications);
+            await AsyncStorage.setItem('userNotifications', JSON.stringify(updatedNotifications));
+        } catch (error) {
+            console.error("Failed to delete user notification", error);
+        }
+    };
+
     // Periodically check for expired notifications
     useEffect(() => {
         const interval = setInterval(() => {
@@ -63,7 +74,7 @@ export const UserNotificationsProvider = ({ children }) => {
     }, [userNotifications]);
 
     return (
-        <UserNotificationsContext.Provider value={{ userNotifications, addUserNotification }}>
+        <UserNotificationsContext.Provider value={{ userNotifications, addUserNotification, removeUserNotification }}>
             {children}
         </UserNotificationsContext.Provider>
     );

@@ -10,6 +10,7 @@ import styles from '../Utils/styles';
 import MainTitle from '../Components/MainTitle';
 import { API_ROOT } from '../../apiroot';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
+import Colors from '../Utils/Colors';
 
 
 const UserProfile = () => {
@@ -98,8 +99,8 @@ const UserProfile = () => {
 
       {/* --------------- Log out button ---------------- */}
       <TouchableOpacity onPress={onLogOut} style={[{alignItems: 'center'}]}>
-        <View style={[styles.button, {width: 350, marginTop: 120}]}>
-          <Text style={[styles.buttonText, {letterSpacing: 2}]}>Log Out</Text>
+        <View style={[styles.button, {width: 350, marginTop: 120, backgroundColor: Colors.BACKGROUND, borderColor: Colors.PRIMARY, borderWidth:1}]}>
+          <Text style={[styles.buttonText, {letterSpacing: 1, color: Colors.PRIMARY}]}>Log Out</Text>
         </View>
       </TouchableOpacity>
 

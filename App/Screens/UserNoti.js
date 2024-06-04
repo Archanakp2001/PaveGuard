@@ -14,8 +14,10 @@ import { UserNotificationsContext } from '../Contexts/UserNotificationsContext';
 
 const UserNoti = () => {
 
-  const { userNotifications } = useContext(UserNotificationsContext);
+  const { userNotifications, removeUserNotification } = useContext(UserNotificationsContext);
   const [username, setUsername] = useState(null);
+  const [badgeCount, setBadgeCount] = useState(0);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const getUsername = async () => {
@@ -38,11 +40,24 @@ const UserNoti = () => {
 
   const filteredNotifications = userNotifications.filter(notification => notification.user === username);
 
+  useEffect(() => {
+    if (username) {
+      setBadgeCount(filteredNotifications.length);
+      navigation.setOptions({
+        tabBarBadge: filteredNotifications.length > 0 ? filteredNotifications.length : null,
+      });
+    }
+  }, [username, userNotifications, navigation]);
+
+  
   // handle notification press 
-  const navigation = useNavigation();
-  const handleNotificationPress = (issueId) => {
+  const handleNotificationPress = async (issueId, notificationId) => {
+    // Navigate to the issue report screen
     navigation.navigate('IssueReport', { issueId });
-  }; 
+
+    // Delete the notification
+    await removeUserNotification(notificationId);
+  };
 
 
   return (
@@ -56,10 +71,10 @@ const UserNoti = () => {
       <View style={styles.cards}>
         
         {filteredNotifications.map((notification) => (
-        <TouchableOpacity key={notification.id} style={styles.notifications} onPress={() => handleNotificationPress(notification.issueId)}>
+        <TouchableOpacity key={notification.id} style={styles.notifications} onPress={() => handleNotificationPress(notification.issueId, notification.id)}>
           
-          <View style={[{paddingLeft: 10}]}>
-            <View style={[{flexDirection: 'row', borderBottomWidth: 0.5, borderColor: '#B3B3B3' ,width: 320, paddingBottom: 6, marginBottom: 10, justifyContent: 'space-between'}]}>
+          <View>
+            <View style={[{flexDirection: 'row', borderBottomWidth: 0.5, borderColor: '#B3B3B3' ,width: 340, paddingBottom: 6, marginBottom: 10, justifyContent: 'space-between'}]}>
               <Text style={[{fontWeight: 'bold'}]}>{notification.title}</Text>
               <Text>#{notification.issueId}</Text>
             </View>
@@ -67,10 +82,6 @@ const UserNoti = () => {
               <Image source={place} />
               <Text>{notification.location}</Text>
             </View>
-          </View>
-
-          <View>
-            <Image source={menuVertical} style={[{height: 30, width: 30, marginTop: 15, marginLeft: 10}]}/>
           </View>
           
         </TouchableOpacity>

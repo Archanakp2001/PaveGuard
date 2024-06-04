@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, RefreshControl } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -43,7 +43,6 @@ const UserFeedback = () => {
         // Reverse the order of issues array to show recent issues first
         const reversedFeeds = response.data.results.reverse();
         setFeedbacks(reversedFeeds);
-        console.log(reversedFeeds);
 
       } else {
         console.error("Unexpected response format:", response.data);
@@ -56,6 +55,14 @@ const UserFeedback = () => {
 useEffect (() => {
   fetchFeedbacks();
 }, [isFocused]); // Fetch data when the screen is focused or refreshed
+
+
+// ----------------- refresh the feedback ----------------
+const [refreshing, setRefreshing] = useState(false);
+const onRefresh = () => {
+  setRefreshing(true);
+  fetchFeedbacks().finally(() => setRefreshing(false));
+};
   
   return (
     <View style={styles.mainContainer}>
@@ -64,7 +71,8 @@ useEffect (() => {
         contentContainerStyle={styles.miniContainer}
         resetScrollToCoords={{ x: 0, y: 0 }}
         scrollEnabled={true}
-        showsVerticalScrollIndicator={false} >
+        showsVerticalScrollIndicator={false} 
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} >
       
         {/* ---------------------- Title ------------------- */}
         <MiniTitle title='Feedbacks' navigateTo={onIconClick}/>

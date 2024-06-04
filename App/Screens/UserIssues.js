@@ -43,7 +43,6 @@ const UserIssues = () => {
   const isFocused = useIsFocused(); // Hook to check if the screen is focused
   const navigation = useNavigation();
   const [filterCriteria, setFilterCriteria] = useState({ issueWith: "", status: "", location: "" });
-  const [refreshing, setRefreshing] = useState(false);
 
 
   const fetchIssues = async () => {
@@ -121,6 +120,7 @@ const UserIssues = () => {
 
 
   // ----------------- refresh the issues ----------------
+  const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
     fetchIssues().finally(() => setRefreshing(false));

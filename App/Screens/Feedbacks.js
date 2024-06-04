@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -64,7 +64,9 @@ useEffect (() => {
 
 
         {/* ------------------- Feedbacks ------------------ */}
-        <View style={{alignItems: 'center', marginTop: 30}}>
+
+        <ScrollView>
+        <View style={{alignItems: 'center', marginTop: 20, marginBottom: 40}}>
           {feedbacks.map((feedback, index) => (
             <View key={index} style={[styles.feedbacks, {marginBottom: 20}]}>
               <Text style={{textAlign: 'right', color: Colors.PRIMARY}}>{new Date(feedback.created_at).toLocaleDateString()}</Text>
@@ -72,6 +74,7 @@ useEffect (() => {
             </View>
           ))}
         </View>
+        </ScrollView>
 
       </KeyboardAwareScrollView>
       

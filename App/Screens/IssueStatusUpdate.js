@@ -272,6 +272,7 @@ const IssueStatusUpdate = () => {
                         <Picker.Item label="Work Completed" value="Work Completed" />
                     </Picker>
               </View>
+
               {/* Update button */}
               <Pressable onPress={handleUpdate} style={{width: 140, height: 50, backgroundColor: Colors.PRIMARY, borderRadius: 10, alignSelf: 'flex-end', justifyContent: 'center'}}>
                 <Text style={{color: '#fff', textAlign: 'center', fontSize: 15, letterSpacing: 1, fontWeight: '500'}}>UPDATE</Text>
@@ -279,13 +280,6 @@ const IssueStatusUpdate = () => {
             </View>
             
           </View>
-
-          {/* Update button */}
-          {/* <View style={{ marginTop: 20 }}>
-            <Pressable style={{width: 120, height: 40, backgroundColor: Colors.PRIMARY, borderRadius: 10, alignSelf: 'flex-end', justifyContent: 'center'}}>
-              <Text style={{color: '#fff', textAlign: 'center', fontSize: 15, letterSpacing: 1, fontWeight: '500'}}>UPDATE</Text>
-            </Pressable>
-          </View> */}
 
 
 

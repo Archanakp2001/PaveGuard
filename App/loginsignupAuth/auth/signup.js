@@ -1,7 +1,7 @@
 import { API_ROOT } from "../../../apiroot";
 
-const signup = async (username, email, password) => {
-    const data = {username, email, password};
+const signup = async (username, email, password, phone, place) => {
+    const data = {username, email, password, profile: {phone, place} };
     
     const response = await fetch( API_ROOT + '/create-user/', {
       method: 'POST',

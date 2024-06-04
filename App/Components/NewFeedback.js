@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Modal, Text, TextInput, TouchableOpacity, Image, Button } from 'react-native';
+import { View, Modal, Text, TextInput, TouchableOpacity, Image, Button, Alert } from 'react-native';
 
 import styles from '../Utils/styles';
 
@@ -14,23 +14,25 @@ const NewFeedback = ({ isVisible, onClose }) => {
 
     const [content, setContent] = useState('');
     const navigation = useNavigation();
-
+    
     const onSubmit = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         console.log(token);
 
-        const formData = new FormData();
-        formData.append('content', content);
-        console.log('Submitting feedback', formData);
+        // const formData = new FormData();
+        // formData.append('content', content);
+        console.log('Submitting feedback');
 
-        const response = await axios.post(API_ROOT + '/api/feedbacks/', formData, {
+        const response = await axios.post(API_ROOT + '/api/feedbacks/', {content}, {
           headers: {
             Authorization: `Token ${token}`,
-            'Content-Type': 'multipart/form-data',
+            // 'Content-Type': 'multipart/form-data',
           }
         });
+        Alert.alert('Feedback submitted')
         console.log('Feedback submitted', response.data)
+    
         navigation.navigate('UserFeedback')
         onClose();
       } catch(error) {

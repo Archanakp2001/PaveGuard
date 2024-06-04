@@ -35,14 +35,9 @@ const navigation = useNavigation();
 const { usernameError, emailError, phoneError, passwordError, confPasswordError, handleSignup, loading } = useLoginOrSignup(navigation)
   
   
-
   const onSignInClick = () => {
     navigation.navigate('SignInScreen');
   }
-  // const onSignUpClick = () => {
-  //   navigation.navigate('UserHome');
-  // }
-
   
 
   return (
@@ -87,7 +82,7 @@ const { usernameError, emailError, phoneError, passwordError, confPasswordError,
 
           {/* ------------------ Signup button --------------- */}
           <View>{loading}</View>
-          <TouchableOpacity onPress={() => handleSignup(username, email, password, phone, confPassword)}>
+          <TouchableOpacity onPress={() => handleSignup(username, email, password, phone, place, confPassword)}>
             <View style={[styles.button, {marginTop: 50}]}>
               <Text style={styles.buttonText}>SIGN UP</Text>
             </View>

@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
-import { FlatList } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
@@ -9,40 +7,100 @@ import MiniTitle from '../Components/MiniTitle';
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
+import getUserDetails from '../Contexts/UserDetails';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_ROOT } from '../../apiroot';
 
 const UserEditProfile = () => {
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [place, setPlace] = useState('');
 
   const navigation = useNavigation();
   const onPasswordChange = () => {
     navigation.navigate('PasswordChange')
   }
-  const onSubmit = () => {
-    navigation.navigate('UserProfile')
-  }
+  
   const onIconClick = () => {
     navigation.goBack()
   }
 
-  const [data, setData] = useState([]);
+  const fetchUserDetails = async () => {
+    try {
+        const token = await AsyncStorage.getItem('token');
+        const details = await getUserDetails(token);
+        setUsername(details.username);
+        setEmail(details.email);
+        setPhone(details.profile.phone);
+        setPlace(details.profile.place);
+
+    } catch (error) {
+        setError(error);
+    } finally {
+        setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    axios.get('http://192.168.91.139:8000/api/users/')
-      .then(response => {
-        setData(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+      fetchUserDetails();
   }, []);
+
+
+  // -------------------- update profile --------------------
+  const onSubmit = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.put(
+        API_ROOT + '/update-profile/', 
+        {
+          username,
+          email,
+          profile: {
+            phone,
+            place
+          }
+        },
+        {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        }
+      );
+
+      if (response.status === 200) {
+        Alert.alert('Success', 'Profile updated successfully');
+        navigation.goBack();
+      } else {
+        console.log('Error updating profile:', response.data);
+      }
+    } catch (error) {
+      console.log('Error updating profile:', error);
+      setError(error);
+    }
+  };
+
+
+  // -------------------- loading -------------------------
+  if (loading) {
+    return (
+      <View style={{flex: 1, backgroundColor: Colors.BACKGROUND, paddingTop: 80}}>
+          <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+  );
+  }
+
+  if (error) {
+    return <Text style={{paddingTop: 100}}>Error: {error.message}</Text>;
+}
 
   return (
 
 
     <View style={styles.miniContainer}>
-            <FlatList
-                data={data}
-                keyExtractor={item => item.id.toString()}
-                renderItem={({ item }) => (
 
                   <View style={styles.mainContainer}>
 
@@ -54,19 +112,29 @@ const UserEditProfile = () => {
                   <View style={[{alignItems: 'center', marginTop: 30}]}>
                   <TextInput
                     style={styles.editInput}
-                    defaultValue={item.username}
-                    placeholder="@Username"
+                    value={username}
+                    onChangeText={setUsername}
+                    placeholder="Username"
+                    
+                  />
+                  <TextInput
+                    style={styles.editInput}
+                    value={email}
+                    onChangeText={setEmail}
+                    placeholder="Email"
                   />
                   <TextInput
                     style={styles.editInput}
                     keyboardType="numeric"
-                    defaultValue={item.phone}
-                    placeholder="@Phone no"
+                    value={phone}
+                    onChangeText={setPhone}
+                    placeholder="Phone no"
                   />
                   <TextInput
                     style={styles.editInput}
-                    defaultValue={item.email}
-                    placeholder="@Email"
+                    value={place}
+                    onChangeText={setPlace}
+                    placeholder="Place"
                   />
                   </View>
             
@@ -80,7 +148,7 @@ const UserEditProfile = () => {
             
             
                   {/* ----------------- Submit button --------------------- */}
-                  <TouchableOpacity onPress={onSubmit} style={[{alignItems: 'center'}]}>
+                  <TouchableOpacity onPress={onSubmit} style={[{alignItems: 'center', }]}>
                     <View style={[styles.button, {width: 350, marginTop: 20}]}>
                       <Text style={[styles.buttonText, {letterSpacing: 2, fontSize: 18}]}>SUBMIT</Text>
                     </View>
@@ -90,8 +158,6 @@ const UserEditProfile = () => {
                 </View>
 
 
-                )}
-            />
     </View>
 
 

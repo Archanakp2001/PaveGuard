@@ -80,7 +80,7 @@ const User = () => {
               style={{ width: 30, height: 30, tintColor: focused ? Colors.PRIMARY : '#B0B0B0' }}
             />
           ),
-          tabBarBadge: notificationCount
+          tabBarBadge: notificationCount>0 ? '' : null
         }}
       />
       <Tab.Screen
