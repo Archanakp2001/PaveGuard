@@ -23,6 +23,7 @@ import deleteIcon from './../../assets/images/delete.png';
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
 import axios from 'axios';
+import { API_ROOT } from './../../apiroot';
 
 const AuthoSignup = () => {
 
@@ -36,7 +37,9 @@ const AuthoSignup = () => {
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
   const [imageUri, setImageUri] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const navigation = useNavigation();
 
   // ---------------------- open gallery for profile photo --------------------
   const openGallery = async () => {
@@ -64,48 +67,51 @@ const AuthoSignup = () => {
   }
 
 
-  const navigation = useNavigation();
-
+  // --------------------- Signin button ---------------------
   const onSignInClick = () => {
     navigation.navigate('SignInScreen')
   }
 
-  // commented out ---------------------------
-  // const onSignupClick = () => {
-  //   navigation.navigate('Authority')
-  // }
-  // upto here -----------------------
 
-  const onSignupClick = () => {
-    const data = {
-        user: {
-            username: authoName,
-            password: password,
-            email: email,
-        },
-        phone_no: phone,
-        place: place,
-        authority_name: authoName,
-        department: department,
-        license_no: license,
+  // ---------------------- Signup --------------------------
+  const onSignupClick = async () => {
+    if (password !== confPassword) {
+      Alert.alert('Passwords do not match');
+      return;
+    }
+
+    const payload = {
+      username: authoName,
+      email,
+      password,
+      profile: {
+        phone,
+        place,
+        department,
+        license_no: license
+      }
     };
 
-    axios.post('http://192.168.31.91:8000/authority_signup/', data)
-        .then(response => {
-            console.log(response.data);
-            // Handle successful signup, navigate to login screen
-            navigation.navigate('SignInScreen');
-        }).catch(error => {
-            console.error(error);
-            // Handle signup error
-        });
-};
+    setIsLoading(true);
 
-  
+    try {
+      const response = await axios.post(API_ROOT + '/signup-authority/', payload);
+
+      if (response.status === 201) {
+        Alert.alert('Success', 'Account created successfully!');
+        navigation.navigate('SignInScreen');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong during signup');
+      console.log(error.message);
+    }
+
+    setIsLoading(false);
+  };
 
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {paddingTop: 20}]}>
       <KeyboardAwareScrollView
         contentContainerStyle={styles.maincontainer}
         resetScrollToCoords={{ x: 0, y: 0 }}
@@ -152,7 +158,7 @@ const AuthoSignup = () => {
           
           <TouchableOpacity onPress={onSignupClick}>
             <View style={[styles.button, {marginTop: 20}]}>
-              <Text style={styles.buttonText}>SIGN UP</Text>
+              <Text style={styles.buttonText}>{isLoading ? 'Signing up...' : 'SIGN UP'}</Text>
             </View>
           </TouchableOpacity>
 

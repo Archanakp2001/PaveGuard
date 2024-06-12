@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Image, TextInput, Button, TouchableOpacity, Linking } from 'react-native';
+import { Text, View, Image, TextInput, Button, TouchableOpacity, Linking, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +16,9 @@ import passwordIcon from './../../assets/images/password.png';
 
 import styles from '../Utils/styles';
 import Colors from '../Utils/Colors';
+import { API_ROOT } from '../../apiroot';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function SignInScreen() {
@@ -43,10 +46,60 @@ const [showPassword, setShowPassword] = useState(false);
 const toggleShowPassword = () => { 
     setShowPassword(!showPassword); 
 }; 
-// const [userType, setUserType] = useState('User');
 
+// const { usernameError, passwordError, handleLogin, loading } = useLoginOrSignup(navigation)
 
-const { usernameError, passwordError, handleLogin, loading } = useLoginOrSignup(navigation)
+// ------------------------- SignIn -----------------------------
+const [usernameError, setUsernameError] = useState('')
+const [passwordError, setPasswordError] = useState('')
+const [loading, setLoading] = useState(false)
+
+const clearErrors = () => {
+  setUsernameError('')
+  setPasswordError('')
+};
+
+const handleLogin = async () => {
+  clearErrors();
+    if(username == '')
+    {
+      setUsernameError('Username cannot be empty')
+      return
+    }
+    if(password == '') {
+      setPasswordError('Password cannot be empty')
+      return
+    }
+
+  const payload = {
+    username,
+    password,
+  };
+
+  setLoading(true);
+
+  try {
+    const response = await axios.post(API_ROOT + '/api-token-auth/', payload);
+    
+    if (response.status === 200) {
+      const token = response.data.token;
+      await AsyncStorage.setItem('token', token); // Store the token
+      console.log(token);
+
+      const userProfile = response.data.user.profile ? 'profile' : 'authority_profile';
+
+      if (userProfile === 'profile') {
+        navigation.navigate('User');
+      } else if (userProfile === 'authority_profile') {
+        navigation.navigate('Authority');
+      }
+    }
+  } catch (error) {
+    setPasswordError('Invalid credentials');
+  }
+
+  setLoading(false);
+};
 
 
 // --------------- Popup -----------------
@@ -83,7 +136,7 @@ if (isLoading) {
               
               {/* ---------- SignIn Image ---------------- */}
               <View style={styles.imgcontainer}>
-                  <Image style={[{height: 400}, {width: 300}]} source={require('./../../assets/images/signin_img.png')}/>
+                  <Image style={[{height: 400}, {width: 400, marginTop: 50}]} source={require('./../../assets/images/image.png')}/>
               </View>
 
 
@@ -147,9 +200,9 @@ if (isLoading) {
 
                 {/* --------- Sign in button ----------- */}
                   <View>{loading}</View>
-                  <TouchableOpacity onPress={() => handleLogin(username, password)}>
+                  <TouchableOpacity onPress={handleLogin}>
                       <View style={styles.button}>
-                          <Text style={styles.buttonText}>SIGN IN</Text>
+                          <Text style={styles.buttonText}>{loading ? 'Signing in...' : 'SIGN IN'}</Text>
                       </View>
                   </TouchableOpacity>
 

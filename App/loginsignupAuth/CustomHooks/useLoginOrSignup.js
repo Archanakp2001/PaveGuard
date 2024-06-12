@@ -42,11 +42,20 @@ const useLoginOrSignup = (navigation) => {
       setLoading(true)
       
       const result = await login(username, password, setLoading, setPasswordError);
+        // if (result.token) {
+        //     navigation.navigate('User', { userDetails: result });
+        // } else {
+        //     setLoading(false);
+        //     setPasswordError('Invalid credentials');
+        // }
         if (result.token) {
-            navigation.navigate('User', { userDetails: result });
-        } else {
-            setLoading(false);
-            setPasswordError('Invalid credentials');
+          const userProfile = response.data.user.profile ? 'profile' : 'authority_profile';
+  
+          if (userProfile === 'profile') {
+            navigation.navigate('User');
+          } else if (userProfile === 'authority_profile') {
+            navigation.navigate('Authority');
+          }
         }
 
     }

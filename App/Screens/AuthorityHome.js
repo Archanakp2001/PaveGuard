@@ -18,6 +18,35 @@ const AuthorityHome = () => {
     const isFocused = useIsFocused(); // Hook to check if the screen is focused
     const navigation = useNavigation();
 
+
+    // ----------------------- Get Authority name -------------------------
+    const [authoname, setAuthoname] = useState('');
+    const fetchAuthority = async () => {
+        try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(API_ROOT + '/authority-profile/', {
+            headers: {
+            Authorization: `Token ${token}`,
+            },
+        });
+
+        if (response.data && response.data.username) {
+            setAuthoname(response.data.username);
+        } else {
+            console.error("Unexpected response format:", response.data);
+        }
+        
+        } catch (error) {
+        console.error("Error fetching username:", error.message || error);
+        }
+    };
+
+    useEffect (() => {
+        fetchAuthority();
+    }, [isFocused]); // Fetch data when the screen is focused or refreshed
+
+
+
     // Fetch issues and recalculate counts when screen is refreshed
     const fetchIssues = async () => {
         try {
@@ -161,7 +190,7 @@ const AuthorityHome = () => {
             <View style={[{backgroundColor: Colors.BACKGROUND, }]}>
                 <View style={[{flexDirection:'row', justifyContent:'center'}]}>
                     <View style={[{backgroundColor: Colors.PRIMARY, height: 120, width: 330, borderBottomLeftRadius: 60}]}>
-                        <Text style={[{paddingTop: 60, paddingLeft: 60, fontSize: 20, color: Colors.WHITE, fontWeight: '500', letterSpacing: 1, textAlign: 'center'}]}>Welcome !!</Text>
+                        <Text style={[{paddingTop: 60, paddingLeft: 60, fontSize: 20, color: Colors.WHITE, fontWeight: '500', letterSpacing: 1, textAlign: 'center'}]}>Welcome {authoname}!!</Text>
                     </View>
                     <View style={[{backgroundColor: Colors.PRIMARY, height: 180, width: 80}]}></View>
                 </View>

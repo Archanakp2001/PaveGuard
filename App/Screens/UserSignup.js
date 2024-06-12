@@ -49,7 +49,7 @@ const { usernameError, emailError, phoneError, passwordError, confPasswordError,
       showsVerticalScrollIndicator={false} >
 
 
-      <View style={[styles.container, {marginTop: -20}]}>
+      <View style={[styles.container, {marginTop: 20}]}>
 
         <StatusBar style='auto'/>
 

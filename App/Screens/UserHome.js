@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, ScrollView, Button, Pressable } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, ScrollView, Button, Pressable, StatusBar } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -10,6 +10,7 @@ import styles from '../Utils/styles';
 import Colors from '../Utils/Colors.js';
 import ImageCarousel from '../Components/ImageCarousel.js';
 import SlideUpView from '../Components/SlideUpView.js';
+import news from '../../assets/images/news_collage.png';
 
 navigator.geolocation = require('react-native-geolocation-service');
 
@@ -33,31 +34,12 @@ const UserHome = () => {
   return (
     
     <View style={[styles.mainContainer, {paddingBottom: 100}]}>
+      <StatusBar barStyle='dark-content'/>
       <ScrollView keyboardShouldPersistTaps='always'>
 
-      <View style={[{height: 550}]}>
+      <View style={[{height: 450}]}>
 
-        {/* --------------------- Searchbar --------------------- */}
-        {/* <SearchBar onSearch={handleSearch}/> */}
-        <AutoComplete />
-
-        {/* ------------------------ Map ------------------------ */}
-        <View style={[{flex: 1}]}>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}>
-            <Marker
-              coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-              title="Marker Title"
-              description="Marker Description"
-            />
-          </MapView>
-        </View>
+        <Image source={news} style={{height: 450, width: 450}}/>
       
       </View>
 
@@ -93,7 +75,7 @@ const UserHome = () => {
 
       
       {/* ---------------- Help & Support section */}
-      <View style={{ marginHorizontal: 25, marginTop: 50 }}>
+      <View style={{ marginHorizontal: 25, marginTop: 60 }}>
           <Text style={{ color: Colors.PRIMARY, fontSize: 20, fontWeight: '600', marginBottom: 8 }}>Help & Support</Text>
           <Text style={{ color: Colors.TEXT, lineHeight: 20, textAlign: 'justify' }}>
             If you have any questions or need assistance, please visit our Help Center or contact our support team.

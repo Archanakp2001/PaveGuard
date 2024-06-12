@@ -23,14 +23,14 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.BACKGROUND,
       alignItems:'center',
       justifyContent: 'center',
-      paddingTop: 30,
+      // paddingTop: 30,
       // paddingBottom: 120
     },
     imgcontainer: {
-      height: 350,
+      height: 400,
     },
     formcontainer: {
-      marginTop: 50
+      marginTop: 80
     },
     input :{
       flexDirection: 'row', 
@@ -156,8 +156,8 @@ const styles = StyleSheet.create({
     issueButton:{
       height: 50,
       width: 200,
-      backgroundColor: 'rgba(133, 102, 60, 0.8)',
-      borderRadius: 18,
+      backgroundColor: 'rgba(138, 102, 60, 0.85)',
+      borderRadius: 15,
       marginTop: -24,
       alignItems: 'center',
       justifyContent: 'center',
@@ -197,12 +197,12 @@ const styles = StyleSheet.create({
     profileCard: {
       height: 60,
       width: 360,
-      backgroundColor: Colors.BACKGROUND,
+      backgroundColor: Colors.CARD,
       borderRadius: 15,
-      elevation: 6,
+      elevation: 5,
       alignItems: 'center',
       flexDirection: 'row',
-      marginBottom: 30
+      marginBottom: 25
     },
     cardTitle: {
       flex: 1,
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     editInput: {
       borderBottomWidth: 0.2,
       width: 350,
-      height: 50,
+      height: 40,
       borderColor: Colors.TEXT,
       color: '#000',
       letterSpacing: 1,
@@ -294,7 +294,8 @@ const styles = StyleSheet.create({
       borderRadius: 100, 
       alignSelf: 'center', 
       marginTop: -100, 
-      backgroundColor: Colors.BACKGROUND
+      backgroundColor: Colors.BACKGROUND,
+      alignItems: 'center',
     },
     authoName: {
       textAlign: 'center', 
@@ -303,13 +304,13 @@ const styles = StyleSheet.create({
     },
     profileEdit: {
       width: 360,
-      height: 400,
-      backgroundColor: Colors. BACKGROUND,
-      elevation: 3,
+      backgroundColor: Colors.BACKGROUND,
+      elevation: 5,
       marginTop: 50,
       alignSelf: 'center',
       borderRadius: 15,
       paddingHorizontal: 20,
+      paddingBottom: 60
     },
     editImg: {
       height: 45,
